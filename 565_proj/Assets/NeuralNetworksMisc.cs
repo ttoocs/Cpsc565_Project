@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define ADD_BIAS
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -59,20 +60,34 @@ namespace NeuralNet
 			func = function;
             this.batchsize = batchsize; //By default 1.
 			nodes = new Matrix(batchsize, out_size,false); //No need to randomize the node-values (For standard NN)
-			weights = new Matrix(in_size, out_size,true);   //Random weights!
+            #if ADD_BIAS
+                weights = new Matrix(in_size + 1, out_size,true);
+            #else
+			    weights = new Matrix(in_size, out_size,true);   //Random weights!
+            #endif
             //Need to randomize weights.
 		}
 
 		//Forward Propagation.
-		public Matrix Forward(Matrix x)
+		public Matrix Forward(Matrix xin)
 		{
+
+            //Add-in a 1 value to each row? -> New Matrix?!
+            //this.x = x; //Saves the input for back-propagation.
+            #if ADD_BIAS
+                this.x = Matrix.AddBias(xin);
+            #else
+                this.x = xin;
+            #endif
             if(x.Rows != batchsize){
                 throw new Exception("Batch-size is inconsistant.");
             }
+            
             if(x.Columns != weights.Rows){
                 throw new Exception("Inconsistant number of inputs for forward.");
             }
-            this.x = x; //Saves the input for back-propagation.
+
+            
 
 			nodes = Matrix.Transform(func.func, x* weights);    //Saves nodes post-activation.
 
@@ -81,12 +96,19 @@ namespace NeuralNet
 		} 
 
 		//Backward Propagation.
-		public Matrix Backwards(Matrix y, Boolean end=false, Boolean learn=true)
+		public Matrix Backwards(Matrix yin, Boolean end=false, Boolean learn=true)
 		{
+            Matrix y = yin;
+            #if ADD_BIAS
+                if(!end){
+                    y = Matrix.RemoveBias(yin);
+                }
+            #endif
             if(y.Rows != batchsize){
                 throw new Exception("Batch-size is inconsistant.");
             }
             if(y.Columns != nodes.Columns){
+                Debug.Log("Y: "+y.Columns+" nodes: "+nodes.Columns);
                 throw new Exception("Inconsistant number of inputs for backward.");
             }
 
@@ -120,16 +142,16 @@ namespace NeuralNet
 
         public Network(int[] sizes, Neural_func function, int batchsize=1){
 
-            Layers = new Layer[sizes.Length];
+            Layers = new Layer[sizes.Length - 1];
 
-            for(int i = 0; i < sizes.Length -1; i++){   //Generates all the layers. (Minus one for the output).
+            for(int i = 0; i < Layers.Length ; i++){   //Generates all the layers. (Minus one for the output).
                 Layers[i] = new Layer(sizes[i],sizes[i+1],function,batchsize);
             }
         }
 
         public Matrix Forward(Matrix x){
             Matrix carry = x;
-            for(int i=0; i< Layers.Length -1; i++){
+            for(int i=0; i< Layers.Length; i++){
                 carry = Layers[i].Forward(carry);
             }
             return carry;
@@ -137,7 +159,12 @@ namespace NeuralNet
 
         public Matrix Backward(Matrix y){
             Matrix carry = y;
-            for(int i=Layers.Length - 1 ; i > 0; i++){
+            if(Layers[Layers.Length -1] == null){
+                Debug.Log("ffs");
+            }
+            carry = Layers[Layers.Length-1].Backwards(carry,true);
+            for(int i=Layers.Length - 2 ; i > 0; i--){
+                //Debug.Log("At: "+i);
                 carry = Layers[i].Backwards(carry);
             }
             return carry;

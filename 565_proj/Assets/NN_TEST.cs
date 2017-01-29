@@ -13,20 +13,50 @@ public class NN_TEST : MonoBehaviour {
 
 	void Start () {
         Debug.Log("Testing neural network:");
-        //not_tester();
+        //not_tefster();
         //Simple_Back();
         //tester_2();
         network_test1();
+        network_train1(true);
     }
 
     Network net1;
+    Matrix ndset;
     void network_test1(){
-        net1 = new Network(new int[] {4,8,16,32,16,8,4},Neural_sigmoid);
-        Matrix test1 = new Matrix(1,4,new double[,] {{1,2,3,4}});
-        Debug.Log(net1.Forward(test1).ToString()); //Yay it didn't crash!
+        //net1 = new Network(new int[] {4,8,16,32,16,8,4,1},Neural_sigmoid);
+        net1 = new Network(new int[] {4,1},Neural_sigmoid);
+        //Matrix test1 = new Matrix(1,4,new double[,] {{1,2,3,4}});
+        //Debug.Log(net1.Forward(test1).ToString()); //Yay it didn't crash!
+        ndset = new Matrix(16,5, new double[,]{ {0,0,0,0,1},
+                                                {0,0,0,1,0},
+                                                {0,0,1,0,0},
+                                                {0,0,1,1,0},
+                                                {0,1,0,0,0},
+                                                {0,1,0,1,0},
+                                                {0,1,1,0,0},
+                                                {0,1,1,1,0},
+                                                {1,0,0,0,0},
+                                                {1,0,0,1,0},
+                                                {1,0,1,0,0},
+                                                {1,0,1,1,0},
+                                                {1,1,0,0,0},
+                                                {1,1,0,1,0},
+                                                {1,1,1,0,0},
+                                                {1,1,1,1,0}});
 
+        ndset = new Matrix(2,5,new double[,]{ {0,0,0,0,1},{1,1,1,1,0}});
+        //A big thing, to train weird functions!
     }
       
+    void network_train1(bool prnt = false){
+        for(int i =0; i < ndset.Rows ; i++){
+            Matrix a = new Matrix(1,4,new double[,] {{ndset.Elements[i,0],ndset.Elements[i,1],ndset.Elements[i,2],ndset.Elements[i,3]}});   //Gets the arguments.
+            Matrix b = net1.Forward(a);
+            if(prnt)
+                Debug.Log("Training...: Input "+a.ToString() +" Target: " +  ndset.Elements[i,4] +" Output: "+ b.ToString() );
+            net1.Backward(new Matrix(1,1,new double[,] {{ndset.Elements[i,4]}}));
+        }
+    }
     //Legacy test globals:
     Layer l1;
     Layer l2;
@@ -54,7 +84,7 @@ public class NN_TEST : MonoBehaviour {
     }
 
     void tester_2(){
-                l1 = new Layer(2,1, Neural_sigmoid);
+        l1 = new Layer(2,1, Neural_sigmoid);
         Matrix dataset_or = new Matrix(4,3, new double[,]{{0,0,0},{0,1,1},{1,0,1},{1,1,1}});
         Matrix dataset_left = new Matrix(4,3, new double[,]{{0,0,0},{0,1,0},{1,0,1},{1,1,1}});
        // Matrix v0 = new Matrix(1,1, new double[,]{{0}});
@@ -123,7 +153,10 @@ public class NN_TEST : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        for(int i = 0 ; i < 100; i++){
+            network_train1();
+        }
+        network_train1(true);
 
         //for(int j =0; j < 100; j++){
         //    not_testcase();

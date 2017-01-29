@@ -271,6 +271,41 @@ namespace NeuralNet
          throw new Exception("Either the matrices are not the same sizes or a re not vectors!");
       }
       
+        public static Matrix AddBias(Matrix mat1)
+        {
+            Matrix temp = new Matrix(mat1.Rows, mat1.Columns +1);
+            
+            for (int i = 0; i < temp.Rows; i++){
+                temp[i,0] = 1;  //Add the bias
+            }
+            
+            //Copy the rest of the matrix
+            for (int i = 0; i < mat1.Rows; i++)
+            {
+               for (int j = 0; j < mat1.Columns; j++)
+               {
+                  temp[i, j+1] = mat1[i, j];
+               }
+            }
+            
+            return temp;
+        }
 
+        public static Matrix RemoveBias(Matrix mat1)
+        {
+            Matrix temp = new Matrix(mat1.Rows, mat1.Columns -1);
+            
+            //Copy the rest of the matrix
+            for (int i = 0; i < mat1.Rows; i++)
+            {
+               for (int j = 0; j < mat1.Columns-1; j++)
+               {
+                  temp[i, j] = mat1[i, j+1];
+               }
+            }
+            
+            return temp;
+        }
+        
    }
 }
