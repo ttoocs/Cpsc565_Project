@@ -1,0 +1,98 @@
+% 
+% Example file for conference proceedings in Springer Verlag's LNCS format
+%
+% Christian Jacob, September 2007
+% (with LaTeX code provided by Navneet Bhalla)
+%
+
+\documentclass[runningheads]{llncs}
+\usepackage{llncsdoc}
+\usepackage{makeidx}
+
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Preamble: Packages required for the paper
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{epstopdf}
+\makeindex
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+\begin{document}
+
+\title{Camott-EcoSim}
+%\subtitle{<subtitle of your contribution>}
+%\titlerunning{<Your abbreviated contribution title>} 
+%\toctitle{<Your changed title for the table of contents>}
+
+\author{Camilo Talero\inst{1} \\  Scott Saunders\inst{2}  }
+%\authorrunning{<abbreviated author list>}
+%\tocauthor{<enhanced author list for the table of contents>}
+
+\institute{ 
+Dept. of Computer Science, Faculty of Science, University of Calgary, 2500 University Drive N.W., Calgary, Alberta, Canada T2N 1N4\\
+\email{Scott.Saunders@ucalgary.ca \\ Camilo.talero@ucalgary.ca}
+}
+
+\maketitle
+
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% ABSTRACT
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\begin{abstract} 
+%Describe in one or two sentences what your project is about.
+A Simple evolution based ecosystem simulator.
+\end{abstract}
+
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% MAIN TEXT
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\section{Introduction}
+\label{sec:Introduction}
+%Give an introduction to why you have chosen this project. Why is it of interest to study what you propose to explore in your project? 
+%
+%References are added through a bibliography file (e.g., References.bib), so that one has easy access to referenced items \cite{Alon:1999aa}.
+%Cause we can and want to.
+We chose this project because all members of the group are intrested in this type of simulation. We want to observe how an ecosystem evolves over time based on some controllable initial coditons, as we want to see how much the evolution of organisms is determined by the environmnet and how they are influenced by it.
+
+\section{Related Work}
+If you are aware of related work or similar work that has been done before, you should describe and mention it here. Here is also the place to refer to any papers, articles, web sites, etc. where you got your inspiration for your project from.
+Critterding, and many other projects for evolution.
+
+\section{Project Details}
+We will start with evoltuion on basic creatures by adding/removing body parts with variying charecteristics. An example of this, would be a mouth, which could be specilaized to be beter at eating plant matter, or meat.
+
+\section{Software Tools}
+Mention the software tools you are going to use to implement your project. Be specific, i.e., add proper references.
+Initally we are planning to attempt this in Unreal Engine, as it supports linux and is opensource, however failing that, we will be using Unity.
+As for models, we are planning on either very basic ones, using blender to create some, or possibly using some Creative Commons or other freely licensible.
+
+\section{Time line}
+%Give an approximate time line for the implementation of your project.
+The timeline in which hitler killed all those jews, roughly 4 years.
+\begin{enumeration}
+\item Mouth, movement.
+\item World.
+\item Food-spawn.
+\item A creature.
+\item Multiple creatures.
+\item Hope there's evolved behaviour.
+\end{enumeration}
+
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% References: Bibliography
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\bibliographystyle{splncs}
+\bibliography{References} % add bibliography file here
+
+
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Index (optional): collects items in text from \index{...} command
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%\printindex
+
+\end{document}
