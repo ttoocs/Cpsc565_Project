@@ -1,4 +1,4 @@
-% 
+%
 % Example file for conference proceedings in Springer Verlag's LNCS format
 %
 % Christian Jacob, September 2007
@@ -20,88 +20,92 @@
 
 
 \begin{document}
-
+%
 \title{Camott-EcoSim}
 %\subtitle{<subtitle of your contribution>}
-%\titlerunning{<Your abbreviated contribution title>} 
+%\titlerunning{<Your abbreviated contribution title>}
 %\toctitle{<Your changed title for the table of contents>}
-
+%
 \author{Camilo Talero\inst{1} \\  Scott Saunders\inst{2}  }
 %\authorrunning{<abbreviated author list>}
 %\tocauthor{<enhanced author list for the table of contents>}
-
-\institute{ 
+%
+\institute{
 Dept. of Computer Science, Faculty of Science, University of Calgary, 2500 University Drive N.W., Calgary, Alberta, Canada T2N 1N4\\
 \email{Camilo.talero@ucalgary.ca \\ Scott.Saunders@ucalgary.ca}
 }
-
+%
 \maketitle
-
+%
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % ABSTRACT
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-\begin{abstract} 
+%
+\begin{abstract}
 %Describe in one or two sentences what your project is about.
 A Simple evolution based ecosystem simulator.
 \end{abstract}
-
+%
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % MAIN TEXT
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+%
 \section{Introduction}
 \label{sec:Introduction}
-%Give an introduction to why you have chosen this project. Why is it of interest to study what you propose to explore in your project? 
+%Give an introduction to why you have chosen this project. Why is it of interest to study what you propose to explore in your project?
 %
 %References are added through a bibliography file (e.g., References.bib), so that one has easy access to referenced items \cite{Alon:1999aa}.
 %Cause we can and want to.
 %We chose this project because all members of the group are interested in this type of simulation. We want to observe how an ecosystem evolves over time based on some controllable initial conditions, as we want to see how much the evolution of organisms is determined by the environment and how they are influenced by it.
 We chose this project because all members of the group are interested in the emergent properties of evolution and ecosystems. We want to observe how an ecosystem evolves over time based on some controllable initial conditions, as we want to see how much the evolution of organisms is determined by the environment and how they are influenced by it.
-
+%
 \section{Related Work}
 %If you are aware of related work or similar work that has been done before, you should describe and mention it here. Here is also the place to refer to any papers, articles, web sites, etc. where you got your inspiration for your project from.
-Critterding, and many other projects for evolution.
-
+\href{http://critterding.sourceforge.net/}{Critterding}, \href{https://www.google.ca/search?sclient=psy-ab&safe=off&btnG=Search&q=evolution+sim#safe=off&q=eco+sim}{and many other projects for} \href{https://www.google.ca/search?sclient=psy-ab&safe=off&btnG=Search&q=evolution+sim}{evolution}.
+%
 \section{Project Details}
-We will start with evolution on basic creatures by adding/removing body parts with varying characteristics. An example of this, would be a mouth, which could be specialized to be better at eating plant matter, vs meat. 
-
+We will do am evolution simulation, with the hope of getting emergent movement, predator/pray, and scouting behaviours. We hope to accomplish this by creating a set of standard parts, which will be used to create creature species. Each species of creatures will have different abilities due to their parts. Each creature will inherit these, and possible mutate them, and will be thrown into the environment, in hopes that it survives. Through natural selection, the species and creatures will evolve, as the mutations improve. As there are multiple species occurring at once, and we're permitting carnivores and omnivores, we hope to eventually get some predators.\\
+These creatures will be controlled by a brain() function we will write, containing various parameters to influence how the creatures behave. Alternatively, if time allows, this could be done via a neural-network.
+%We will start with evolution on basic creatures by adding/removing body parts with varying characteristics. An example of this, would be a mouth, which could be specialized to be better at eating plant matter, vs meat. As the simulation gets more complex, we hope to see some preditor vs pray adaptions,
+%
 \section{Software Tools}
 %Mention the software tools you are going to use to implement your project. Be specific, i.e., add proper references.
 Initially we are planning to attempt this in Unreal Engine, as it supports Linux and is open source, however failing that, we will be using Unity.
-Sources: 
+Sources:
 \begin{itemize}
 \item \url{https://www.unrealengine.com/what-is-unreal-engine-4}
 \item \url{https://unity3d.com/}
 \end{itemize}
-As for models, we are planning on either very basic ones, using blender to create some, or possibly using some Creative Commons or other freely licensible.
-
+As for 3D models, we are planning on using very basic ones (ie, 3D/builtin shapes), using \href{https://www.blender.org/}{blender} to create some, or possibly using some Creative Commons or other freely licensible ones.
+%
 \section{Time line}
 %Give an approximate time line for the implementation of your project.
 The following represents the milestones we hope to reach in our project:
 \begin{enumerate}
 \item Implement a mouth appendage and movement.
+\item Implement a (simple) brain for creatures.
 \item Implement world generation, creating obstacles and other procedurally generated aspects of the environment.
-\item Implement Food-spawn.
+\item Implement food-spawn.
 \item Implement multiple appendages.
 \item Implement a single creature that can evolve over time using the appendages.
 \item Implement multiple creatures based on the previous step.
 \item Implement multiple food sources.
 \item Look for evolved behaviour, repeat some of the previous steps until satisfied.
 \item (Optional based on time) include climates and environmental conditions like humidity and temperature.
+\item (Optional based on time) Neural-network for the brain.
 \end{enumerate}
-
+%
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % References: Bibliography
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+%
 %\bibliographystyle{splncs}
 %\bibliography{References} % add bibliography file here
-
-
+%
+%
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Index (optional): collects items in text from \index{...} command
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %\printindex
-
+%
 \end{document}
