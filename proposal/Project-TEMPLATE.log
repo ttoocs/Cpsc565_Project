@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Arch Linux) (preloaded format=pdflatex 2016.12.6)  12 FEB 2017 14:16
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Arch Linux) (preloaded format=pdflatex 2016.12.6)  12 FEB 2017 14:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -263,24 +263,23 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 38.
  [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-No file Project-TEMPLATE.bbl.
-[2] (./Project-TEMPLATE.aux) ) 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
+(./Project-TEMPLATE.aux) ) 
 Here is how much of TeX's memory you used:
- 1950 strings out of 493013
- 26526 string characters out of 6139317
+ 1949 strings out of 493013
+ 26522 string characters out of 6139317
  93955 words of memory out of 5000000
  5489 multiletter control sequences out of 15000+600000
  5624 words of font info for 21 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,5n,23p,340b,185s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb
-></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr9.pfb></usr/share/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmtt9.pfb>
-Output written on Project-TEMPLATE.pdf (2 pages, 76084 bytes).
+ 42i,5n,23p,343b,185s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></u
+sr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmtt9.pfb>
+Output written on Project-TEMPLATE.pdf (2 pages, 75589 bytes).
 PDF statistics:
  35 PDF objects out of 1000 (max. 8388607)
  24 compressed objects within 1 object stream
