@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Arch Linux) (preloaded format=pdflatex 2016.12.6)  9 FEB 2017 16:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Arch Linux) (preloaded format=pdflatex 2016.12.6)  12 FEB 2017 14:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -261,34 +261,29 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 38.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 38.
+ [1
 
-
-LaTeX Warning: Citation `Alon:1999aa' on page 1 undefined on input line 56.
-
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 No file Project-TEMPLATE.bbl.
-[1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Project-TEMPLATE.aux) )
- 
+[2] (./Project-TEMPLATE.aux) ) 
 Here is how much of TeX's memory you used:
- 1955 strings out of 493013
- 26581 string characters out of 6139317
- 92955 words of memory out of 5000000
- 5492 multiletter control sequences out of 15000+600000
- 6278 words of font info for 23 fonts, out of 8000000 for 9000
+ 1950 strings out of 493013
+ 26526 string characters out of 6139317
+ 93955 words of memory out of 5000000
+ 5489 multiletter control sequences out of 15000+600000
+ 5624 words of font info for 21 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,4n,23p,320b,185s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7
-.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmtt9.pfb>
-Output written on Project-TEMPLATE.pdf (1 page, 93701 bytes).
+ 42i,5n,23p,371b,185s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb
+></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmr9.pfb></usr/share/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmtt9.pfb>
+Output written on Project-TEMPLATE.pdf (2 pages, 76489 bytes).
 PDF statistics:
- 40 PDF objects out of 1000 (max. 8388607)
- 28 compressed objects within 1 object stream
+ 35 PDF objects out of 1000 (max. 8388607)
+ 24 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
