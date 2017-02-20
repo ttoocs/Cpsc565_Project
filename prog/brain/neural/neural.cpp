@@ -1,17 +1,18 @@
-
 #define __NO_STD_VECTOR // Use cl::vector instead of STL version
 
 #include <stdio.h>
 #include <time.h>
 
-#include <cstdio>
-#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <iterator>
 
-#include <opencl.h>
+#ifdef usingCL
+
+#include <cstdio>
+#include <cstdlib>
+#include <CL/opencl.h>
 
 
 inline void checkErr(cl_int err, const char * name) {
@@ -24,7 +25,7 @@ inline void checkErr(cl_int err, const char * name) {
 #define WITH_MAIN
 
 #ifdef WITH_MAIN
-void main(int argc, const char * argv[]){
+int main(int argc, const char * argv[]){
   const std::string hw("Hello World\n");
 
   cl_int err;
@@ -41,3 +42,4 @@ void main(int argc, const char * argv[]){
 }
 #endif
 
+#endif
