@@ -8,38 +8,35 @@
 #include <string>
 #include <iterator>
 
-#ifdef usingCL
-
-#include <cstdio>
-#include <cstdlib>
-#include <CL/opencl.h>
-
-
-inline void checkErr(cl_int err, const char * name) {
-  if (err != CL_SUCCESS) {
-  std::cerr << "ERROR: " << name  << " (" << err << ")" << std::endl;
-  exit(EXIT_FAILURE);
-  }
-}
-
 #define WITH_MAIN
 
 #ifdef WITH_MAIN
 int main(int argc, const char * argv[]){
-  const std::string hw("Hello World\n");
-
-  cl_int err;
-  cl::vector< cl::Platform > platformList;
-  cl::Platform::get(&platformList);
-  checkErr(platformList.size()!=0 ? CL_SUCCESS : -1, "cl::Platform::get");
-  std::cerr << "Platform number is: " << platformList.size() << std::endl;std::string platformVendor;
-  platformList[0].getInfo((cl_platform_info)CL_PLATFORM_VENDOR, &platformVendor);
-  std::cerr << "Platform is by: " << platformVendor << "\n";
-  cl_context_properties cprops[3] = {CL_CONTEXT_PLATFORM, (cl_context_properties)(platformList[0])(), 0};cl::Context context(CL_DEVICE_TYPE_CPU,cprops,NULL,NULL,&err);
-  checkErr(err, "Context::Context()");
-
-
+  
 }
 #endif
 
-#endif
+//TODO: BRAIN STRUCTURE:
+// Define a neruon - has linked lists to other neruons (with weight, possibly negative), and a trigger value
+// Define an input neruon - has triggers based on external world
+// Define an output neron - has some-sort of output.
+
+// Have "good"/"bad" training.
+// Methoid1: Simply whatever is currently happening is good, reinforce the last X-time neruons vice-versa for bad.
+// Methoid2: Nothing.
+// Methoid3: Simulated enviroment to quickly train the brain.
+
+// Note: How dose it ever get new neruons? - Just constantly growing, but also pruning?
+// Note: How about synapses?
+
+// Mutations:
+// 1: More neruons (More energy loss)
+// 2: More edges (More energy loss)
+// 3: More inputs - less inputs.
+
+// Handling differnt/modifications to body:
+// Assumption: Differnt inputs/outputs, simply appended.
+// 1: Simply put it the most similar to before? (Trys to fix/correct for different I/O)
+// 2: Screw it, it's a new creature. 
+// 3: Re-train it with methoid3 above.
+
