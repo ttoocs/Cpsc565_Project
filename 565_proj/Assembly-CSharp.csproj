@@ -50,6 +50,7 @@
      <Compile Include="Assets\Creature_init.cs" />
      <Compile Include="Assets\Creature_script_main.cs" />
      <Compile Include="Assets\Mouth_Behaviour.cs" />
+     <Compile Include="Assets\RNN.cs" />
      <Compile Include="Assets\cam_movement.cs" />
      <Compile Include="Assets\particleScript.cs" />
  <Reference Include="UnityEngine.UI">
