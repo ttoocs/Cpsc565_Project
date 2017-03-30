@@ -164,8 +164,8 @@ namespace NeuralNet
             }
             return temp;
          }
-			return null;
-         //throw new MatrixException();
+		//	return null;
+         throw new Exception("Matrix sizes arn't the same!");
       }
 
       public static Matrix operator- (Matrix mat1, Matrix mat2)
@@ -200,10 +200,11 @@ namespace NeuralNet
             }
             return temp;
          }
-			return null;
-         //throw new MatrixException("Dimensions do not match");
+			//return null;
+         throw new Exception("Dimensions do not match");
       }
 
+		//Scaler multiplicatoin.
       public static Matrix operator* (double scaler, Matrix mat1)
       {
          Matrix temp = new Matrix(mat1.Rows, mat1.Columns);
@@ -216,12 +217,12 @@ namespace NeuralNet
          }
          return temp;
       }
-
+		//Scaler Multiplication.
       public static Matrix operator* (Matrix mat1, double scaler)
       {
          return scaler * mat1;
       }
-
+		//Matrix multiplication
       public static Matrix operator* (Matrix mat1, Matrix mat2)
       {
          if (mat1.Columns == mat2.Rows)
