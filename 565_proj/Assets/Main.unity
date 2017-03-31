@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -246,6 +246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1916970791}
   - component: {fileID: 1916970792}
+  - component: {fileID: 1916970793}
   m_Layer: 0
   m_Name: CreatureSpawner
   m_TagString: Untagged
@@ -272,12 +273,23 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1916970790}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd01942d9cdf94156a610eac0f54692c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   creature: {fileID: 1229233219173816, guid: 9dac46de9e523684aab6457db1c3da63, type: 2}
+--- !u!114 &1916970793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1916970790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd4a95a6e0ab241d4a1ca79982b9ff95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2102846179
 GameObject:
   m_ObjectHideFlags: 0

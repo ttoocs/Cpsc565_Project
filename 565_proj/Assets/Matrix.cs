@@ -56,6 +56,7 @@ namespace NeuralNet
          }
 
       }
+        
 
       public Matrix(int rows, int columns, params double[] elements)
       {
@@ -78,8 +79,8 @@ namespace NeuralNet
             this.rows = rows;
             this.columns = columns;
             matrix = new double[rows, columns];
-            if (elements.Length != rows || elements.GetLength(0) != columns)
-                throw new Exception();
+            if (elements.GetLength(0) != rows || elements.GetLength(1) != columns)
+                throw new Exception("ROWS NOT EQUAL TO THE ELEMENTS");
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
@@ -90,14 +91,26 @@ namespace NeuralNet
 
       }
 
-      public Matrix(int rows, int columns)
+      public Matrix(int rows, int columns, bool randomize=true)
       {
          this.rows = rows;
          this.columns = columns;
          matrix = new double[rows, columns];
          //initilzed to 0.0
+         
 
+         if(randomize){
+            System.Random rnd= new System.Random(42);
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    matrix[i, j] = 2*rnd.NextDouble() -1f; //Range of (-1 to 1);
+                }
+            }
+        }
       }
+
 
       public bool SetElement(int xCord, int yCord, double val)
       {

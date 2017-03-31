@@ -6,7 +6,7 @@ public class particleScript : MonoBehaviour {
 
     float start_time;
  	// Use this for initialization
-	Matrix cry;
+	//Matrix cry;
 
 	void Start () {
         start_time = Time.time;

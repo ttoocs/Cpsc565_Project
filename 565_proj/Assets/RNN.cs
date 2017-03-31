@@ -7,6 +7,7 @@ namespace NeuralNet{
 
 public class RNN : MonoBehaviour {
 
+/*
     int hidden_size = 100;   //Num of hidden layer neruons
     int seq_length = 25;      //Num of steps to unroll the RNN
     int input_size  = 10;
@@ -19,6 +20,7 @@ public class RNN : MonoBehaviour {
 
 	Matrix bh; //Hidden Bias
 	Matrix by; //Output Bias
+ */
     
 	// Use this for initialization
 	void Start () {
