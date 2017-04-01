@@ -81,27 +81,33 @@ namespace NeuralNet
 		} 
 
 		//Backward Propagation.
-		public Matrix Backwards(Matrix y, Boolean learn=true)
+		public Matrix Backwards(Matrix y, Boolean end=false, Boolean learn=true)
 		{
             if(y.Rows != batchsize){
                 throw new Exception("Batch-size is inconsistant.");
             }
-            if(y.Columns != nodes.Rows){
+            if(y.Columns != nodes.Columns){
                 throw new Exception("Inconsistant number of inputs for backward.");
             }
 
+            Matrix err;
+            Matrix delta;
+
             //This only works on the last layer. >:
-			Matrix err = y - nodes; //Only supports "last"
-
-			Matrix delta = err * Matrix.Transform(func.deriv,err); //Adjust for the slope
-
-
-			if (learn)
-			{
-				weights = weights + (Matrix.Transpose(x) * delta); //Apply the values.
-			}
-
-			return delta; //Query: How does this get set?
+            if(end){
+    			err = y - nodes; //Only supports "last"
+            }else{
+                err = y; //Takes in error from prior result. 
+            }
+    	    delta = Matrix.HadamardProd(err , Matrix.Transform(func.deriv,nodes)); //Adjust for the slope
+     
+    		if (learn)
+    		{
+    			weights = weights + (Matrix.Transpose(x) * delta); //Apply the values.
+    		}
+               
+    		return delta * Matrix.Transpose(weights);               
+            
 		}
 
 
