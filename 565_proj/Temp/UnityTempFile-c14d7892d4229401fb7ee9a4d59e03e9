@@ -83,6 +83,7 @@ Assets/Creature_init.cs
 Assets/Creature_script_main.cs
 Assets/Matrix.cs
 Assets/Mouth_Behaviour.cs
+Assets/NN_TEST.cs
 Assets/NeuralNetworksMisc.cs
 Assets/RNN.cs
 Assets/cam_movement.cs

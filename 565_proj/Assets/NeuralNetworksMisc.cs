@@ -113,5 +113,36 @@ namespace NeuralNet
 
 	}
 
+    public class Network{
+        Layer[] Layers;
+
+        //Sizes: The size of A: input, <hidden networks>, output
+
+        public Network(int[] sizes, Neural_func function, int batchsize=1){
+
+            Layers = new Layer[sizes.Length];
+
+            for(int i = 0; i < sizes.Length -1; i++){   //Generates all the layers. (Minus one for the output).
+                Layers[i] = new Layer(sizes[i],sizes[i+1],function,batchsize);
+            }
+        }
+
+        public Matrix Forward(Matrix x){
+            Matrix carry = x;
+            for(int i=0; i< Layers.Length -1; i++){
+                carry = Layers[i].Forward(carry);
+            }
+            return carry;
+        }
+
+        public Matrix Backward(Matrix y){
+            Matrix carry = y;
+            for(int i=Layers.Length - 1 ; i > 0; i++){
+                carry = Layers[i].Backwards(carry);
+            }
+            return carry;
+        }
+    
+    }
 
 }

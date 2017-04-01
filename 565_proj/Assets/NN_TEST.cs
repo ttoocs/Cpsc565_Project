@@ -5,20 +5,33 @@ using UnityEngine;
 
 namespace NeuralNet{
 
-public class RNN_TEST : MonoBehaviour {
+public class NN_TEST : MonoBehaviour {
 
-	// Use this for initialization
+	// SIGMOID!
     Neural_func Neural_sigmoid = new Neural_func(Misc.sigmoid, Misc.sigmoid_deriv);
-    Layer l1;
-    Layer l2;
 
-    public Matrix dset;
+
 	void Start () {
         Debug.Log("Testing neural network:");
         //not_tester();
         //Simple_Back();
+        //tester_2();
+        network_test1();
     }
 
+    Network net1;
+    void network_test1(){
+        net1 = new Network(new int[] {4,8,16,32,16,8,4},Neural_sigmoid);
+        Matrix test1 = new Matrix(1,4,new double[,] {{1,2,3,4}});
+        Debug.Log(net1.Forward(test1).ToString()); //Yay it didn't crash!
+
+    }
+      
+    //Legacy test globals:
+    Layer l1;
+    Layer l2;
+    public Matrix dset;
+    //LEGACY TESTS:
     //A simple 1-layer back-propigation test. (Does it improve? (everything approches 1?))
     void Simple_Back(){
         Matrix v1 = new Matrix(1,1, new double[,]{{1}});
@@ -51,7 +64,7 @@ public class RNN_TEST : MonoBehaviour {
         Debug.Log("Start:");
         train(dset,l1,true);
         for(int i =0; i<10; i++){
-            for(int j =0; j<1000; j++)
+            for(int j =0; j<10000; j++)
                   train(dset,l1);
             train(dset,l1,true);
         }
@@ -110,10 +123,12 @@ public class RNN_TEST : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        for(int j =0; j < 100; j++){
-            not_testcase();
-        }
-        not_testcase(true);
+
+
+        //for(int j =0; j < 100; j++){
+        //    not_testcase();
+        //}
+        //not_testcase(true);
             
 		//  for(int j =0; j<1000; j++)
         //          train(dset,l1);
