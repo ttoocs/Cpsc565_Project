@@ -8,10 +8,11 @@ namespace NeuralNet{
 public class NN_TEST : MonoBehaviour {
 
 	// SIGMOID!
-    Neural_func Neural_sigmoid = new Neural_func(Misc.sigmoid, Misc.sigmoid_deriv);
+   //Neural_func Neural_sigmoid; 
 
 
 	void Start () {
+        
         Debug.Log("Testing neural network:");
         //not_tefster();
         //Simple_Back();
@@ -24,7 +25,7 @@ public class NN_TEST : MonoBehaviour {
     Matrix ndset;
     void network_test1(){
         //net1 = new Network(new int[] {4,8,16,32,16,8,4,1},Neural_sigmoid);
-        net1 = new Network(new int[] {4,1},Neural_sigmoid);
+        net1 = new Network(new int[] {4,1},Misc.sigmoidNF());
         //Matrix test1 = new Matrix(1,4,new double[,] {{1,2,3,4}});
         //Debug.Log(net1.Forward(test1).ToString()); //Yay it didn't crash!
         ndset = new Matrix(16,5, new double[,]{ {0,0,0,0,1},
@@ -71,7 +72,7 @@ public class NN_TEST : MonoBehaviour {
         //Debug.Log(fun);
 
         //r1 = Matrix.Transpose(r1);
-        l1 = new Layer(1,3,Neural_sigmoid);
+        l1 = new Layer(1,3,Misc.sigmoidNF());
 
         Matrix a = l1.Forward(v1);
         Debug.Log(a.ToString());
@@ -84,7 +85,7 @@ public class NN_TEST : MonoBehaviour {
     }
 
     void tester_2(){
-        l1 = new Layer(2,1, Neural_sigmoid);
+        l1 = new Layer(2,1, Misc.sigmoidNF());
         Matrix dataset_or = new Matrix(4,3, new double[,]{{0,0,0},{0,1,1},{1,0,1},{1,1,1}});
         Matrix dataset_left = new Matrix(4,3, new double[,]{{0,0,0},{0,1,0},{1,0,1},{1,1,1}});
        // Matrix v0 = new Matrix(1,1, new double[,]{{0}});
@@ -120,8 +121,8 @@ public class NN_TEST : MonoBehaviour {
 
 
     void not_tester(){
-        l1 = new Layer(1,5,Neural_sigmoid);
-        l2 = new Layer(5,1,Neural_sigmoid);
+        l1 = new Layer(1,5,Misc.sigmoidNF());
+        l2 = new Layer(5,1,Misc.sigmoidNF());
         
         not_testcase(true);
         for(int i =0; i<100; i++){ //Training.

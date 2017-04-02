@@ -28,6 +28,7 @@ public class Mouth_Behaviour : MonoBehaviour {
 	void Update () {
 	}
 
+    //TODO: If they stay in the mouth, take damage/etc.
 
 	#if MOUTH_COLLIDER
 	void OnCollisionEnter (Collision collision)	

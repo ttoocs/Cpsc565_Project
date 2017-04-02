@@ -39,7 +39,9 @@ namespace NeuralNet
 		{
 			return sigmoid(val) * (1 - sigmoid(val));
 		}
-
+        public static Neural_func sigmoidNF(){
+            return new Neural_func(Misc.sigmoid, Misc.sigmoid_deriv);
+        }
 	}
 
     //Assuming 1D input array

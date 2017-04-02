@@ -49,6 +49,7 @@
      <Compile Include="Assets\Creature_bits.cs" />
      <Compile Include="Assets\Creature_init.cs" />
      <Compile Include="Assets\Creature_script_main.cs" />
+     <Compile Include="Assets\Eye_script.cs" />
      <Compile Include="Assets\Matrix.cs" />
      <Compile Include="Assets\Mouth_Behaviour.cs" />
      <Compile Include="Assets\NN_TEST.cs" />

@@ -1,14 +1,16 @@
 ﻿#define ADD_MOUTH
 #define ADD_EYE
+#define HIVE_MIND
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using NeuralNet;
 
 public class Creature_script_main : MonoBehaviour {
 
     public ParticleSystem deathParticles;
     public GameObject mouthPart;
-    private List<GameObject> myBodyParts;
+    public List<GameObject> myBodyParts; //Public used in eyes.
 
     private float age;
     private float health;
@@ -25,6 +27,8 @@ public class Creature_script_main : MonoBehaviour {
 
     private Rigidbody body;
 
+    private GameObject eye; //Because we need a better system.
+
     //TODO: Health  - Apprently done by camilo
     //TODO: Energy  - Apprently done by camilo
     //TODO: EYES - Raycast
@@ -35,23 +39,39 @@ public class Creature_script_main : MonoBehaviour {
     //TODO: Add some base food source (vegitation).
     //TODO: RNN brain.
 
+    #if HIVE_MIND
+    public static NeuralNet.Network mind;
+   
+    #else
+    public NeuralNet.Network mind;
+    #endif
+        
 	void Start () {
+        
+        //MIND:
+        if(mind == null){
+            mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 32, 4},
+                                                    NeuralNet.Misc.sigmoidNF()); //Create a neural-network with input size for the eyes, and 4 outputs.
+
+
+            //simple_train();
+        }
 
         myBodyParts = new List<GameObject>();
 
         body = GetComponent<Rigidbody>();
 		//body.velocity = new Vector3 (1,0,0);
-        body.velocity = (new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100))).normalized * 10;
+        //body.velocity = (new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100))).normalized * 10;
         
         #if ADD_EYE
-            GameObject eye = Creature_bits.newEye();
+            eye = Creature_bits.newEye();
             AddBodyPart(eye, (this.transform.forward+new Vector3(0,.4f,0)));
         #endif
 
         #if ADD_MOUTH
             GameObject mouth = Instantiate(mouthPart);
             AddBodyPart(mouth,this.transform.forward);
-#endif
+        #endif
 
         max_age = 300*12*2; //300 ~= 5secs, *12 make sit about a minute
         max_health = 100;
@@ -64,6 +84,17 @@ public class Creature_script_main : MonoBehaviour {
         trueColor = GetComponent<Renderer>().material.color;
     } 
 	
+
+    void simple_train(){
+        //Nothing infront -> Don't do much.
+        NeuralNet.Matrix zeroin = new NeuralNet.Matrix(1,4*3, new double[,] {{0,0,0,0,0,0,0,0,0,0,0,0}});
+        NeuralNet.Matrix zerout = new NeuralNet.Matrix(1,4, false);
+        for(int i=0; i<10; i++){
+            mind.Forward(zeroin);
+            mind.Backward(zerout);
+        }
+    }
+
     //Add's a bodypart!
     void AddBodyPart(GameObject part){
         AddBodyPart(part,new Vector3(0,0,0));
@@ -104,14 +135,29 @@ public class Creature_script_main : MonoBehaviour {
     //this one is a prototype
     void brain()
     {
+        NeuralNet.Matrix ret = mind.Forward(eye.gameObject.GetComponent<Eye_script>().look()); //Dirty hack to get the input from the eye... isn't great..
+
+        //Velocity = (brainoutput 1*45)*Velocity + accel
+        //body.velocity = Quaternion.AngleAxis((float)(ret[0,0]*45), Vector3.up)*body.velocity + (body.transform.forward * (float)ret[0,1]);   //The rotation is based off the result.
+        //food -= (float)(ret[0,1]);  //Accel costs.
+
+        //Rotate
+        transform.rotation = Quaternion.AngleAxis((float)(ret[0,0]*1),  Vector3.up)*transform.rotation ;
+    
+        //Move
+        body.velocity += (float)ret[0,1]*0.1f*transform.forward;
+        food -= (float)(ret[0,1]);
+
+        /*
         if (Random.Range(0, 100) < 10)
         {
             body.velocity =  Quaternion.AngleAxis(Random.Range(-45,45), Vector3.up)*body.velocity;
            // body.velocity = new Vector3(0,0,10);
-        }
-		if (body.velocity != new Vector3 (0, 0, 0)) {
-			transform.rotation = Quaternion.LookRotation (body.velocity);
-		}
+        } */
+        //Face velocity dir.
+		//if (body.velocity != new Vector3 (0, 0, 0)) {
+		//	transform.rotation = Quaternion.LookRotation (body.velocity);
+		//}
     }
 
     void displayDamage()
@@ -141,6 +187,12 @@ public class Creature_script_main : MonoBehaviour {
         food += foodAmount;
         if (food > max_food)
             food = max_food;
+        
+        //OMNOMS. THIS IS GOOD.
+        //mind.Forward(eye.GetComponent<Eye_script>().last);
+        mind.Backward(2*mind.Forward(eye.GetComponent<Eye_script>().last)); //DOUBLE EVERYTHING!
+        
+
     }
 
     void die()

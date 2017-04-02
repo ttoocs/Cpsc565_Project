@@ -271,6 +271,12 @@ namespace NeuralNet
          throw new Exception("Either the matrices are not the same sizes or a re not vectors!");
       }
       
+
+        //TODO: Set-row
+        //TODO: Get-row
+        //TODO: Set-col
+        //TODO: Get-col
+
         public static Matrix AddBias(Matrix mat1)
         {
             Matrix temp = new Matrix(mat1.Rows, mat1.Columns +1);

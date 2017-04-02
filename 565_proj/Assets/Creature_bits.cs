@@ -25,6 +25,7 @@ public class Creature_bits : MonoBehaviour {
         eye.GetComponent<Transform>().localScale = scale;
         //TODO: Check for other scales n things
         //TODO: Raycast n things (in a script?)
+        eye.AddComponent(typeof(Eye_script));
         return eye;
     }
     
