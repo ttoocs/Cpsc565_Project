@@ -5,6 +5,7 @@ using System.Text;
 //using System.Threading.Tasks;
 using System.Collections;
 //using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 namespace NeuralNet
@@ -253,9 +254,14 @@ namespace NeuralNet
       {
          return scaler * mat1;
       }
+
+
+      
+        //Attempting to thread this!
 		//Matrix multiplication
       public static Matrix operator* (Matrix mat1, Matrix mat2)
       {
+         return threaded_Mult(mat1,mat2);
          if (mat1.Columns == mat2.Rows)
          {
             double[] temp = new double[mat1.Rows * mat2.Columns];
@@ -331,5 +337,45 @@ namespace NeuralNet
             return temp;
         }
         
+
+        public static Matrix threaded_Mult(Matrix mat1, Matrix mat2){
+         LinkedList<Thread> threads = new LinkedList<Thread>();
+         if (mat1.Columns == mat2.Rows)
+         {
+            double[,] temp = new double[mat1.rows,mat2.columns];
+            for(int dcol=0; dcol < mat2.columns; dcol++){
+                    //Thread t = new Thread(() => threaded_Mult_Helper(mat1,mat2,temp,dcol));
+                    //t.Start();
+                    //threads.AddFirst(t);
+                     threaded_Mult_Helper(mat1,mat2,temp,dcol);
+            }
+            foreach(Thread t in threads){  //Wait for the threads!
+                t.Join(0);
+            }
+            Thread.Sleep(1000);
+            return new Matrix(mat1.Rows, mat2.Columns, temp);
+         }
+
+
+         throw new Exception("Invalid matrices for multiplication");                    
+        }
+
+       public static void threaded_Mult_Helper(Matrix mat1, Matrix mat2, double[,] temp, int dcol){
+            //Dcol: the colum of values we're computing.
+            for(int currow=0; currow<mat2.rows; currow++){
+                double sum=0;
+                //Debug.Log("fs");
+                //temp[currow,dcol]=3;
+                for(int a=0; a < mat1.columns; a++){
+                    sum+= mat1[currow,a]*mat2[a,dcol];  //OUT OF BOUDNS EXCEPTION. FFS,
+                    
+                }
+                //Debug.Log("wo:"+currow+":"+dcol+"= "+sum);
+                temp[currow,dcol]=sum;
+            }
+       }
+
+
    }
+
 }

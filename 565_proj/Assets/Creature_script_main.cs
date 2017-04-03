@@ -197,7 +197,7 @@ public class Creature_script_main : MonoBehaviour {
         //Rotate
         //transform.rotation = Quaternion.AngleAxis((float)((ret[0,0]-0.5)*1),  Vector3.up)*transform.rotation ;
         
-        transform.rotation = new Quaternion((float)ret[0,1],(float)ret[0,2],(float)ret[0,3],(float)ret[0,4]);
+        transform.rotation = new Quaternion((float)(ret[0,1]-0.5)*2*Mathf.PI,(float)(ret[0,2]-0.5)*2*Mathf.PI,(float)(ret[0,3]-0.5)*2*Mathf.PI,(float)(ret[0,4]-0.5)*2*Mathf.PI);
         
         //Move
         body.velocity = (float)(ret[0,0]-0.5)*5f*transform.forward;
