@@ -217,6 +217,24 @@ namespace NeuralNet
          throw new Exception("Dimensions do not match");
       }
 
+
+        //I NEED DIS.
+      public static Matrix operator- (Matrix mat1, double d)
+      {
+
+            Matrix temp = new Matrix(mat1.Rows, mat1.Columns);
+            for (int i = 0; i < mat1.Rows; i++)
+            {
+               for (int j = 0; j < mat1.Columns; j++)
+               {
+                  temp.SetElement(i, j, (mat1.Elements[i, j] - d) );
+               }
+            }
+            return temp;
+         
+
+      }
+
 		//Scaler multiplicatoin.
       public static Matrix operator* (double scaler, Matrix mat1)
       {

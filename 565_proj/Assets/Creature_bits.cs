@@ -20,13 +20,7 @@ public class Creature_bits : MonoBehaviour {
     
     public static GameObject newEye()
     {
-        Vector3 scale = new Vector3(0.1f,0.1f,0.1f);
-        GameObject eye =  GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        eye.GetComponent<Transform>().localScale = scale;
-        //TODO: Check for other scales n things
-        //TODO: Raycast n things (in a script?)
-        eye.AddComponent(typeof(Eye_script));
-        return eye;
+        return Eye_script.newEye();
     }
     
     

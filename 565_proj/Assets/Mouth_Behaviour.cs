@@ -52,4 +52,10 @@ public class Mouth_Behaviour : MonoBehaviour {
         }
 
 	}
+#if MOUTH_COLLIDER
+      void OnCollisionStay(Collision collision){OnCollisionEnter(collision);    }
+#else
+      void OnTriggerStay(Collider collision){OnTriggerEnter(collision);}
+#endif
+
 }

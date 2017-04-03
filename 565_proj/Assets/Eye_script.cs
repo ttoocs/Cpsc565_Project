@@ -1,21 +1,23 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using NeuralNet;
 
 public class Eye_script : MonoBehaviour {
     
-    public float radius = 40f;
-    public static int num_return = 4;      //Number of nearest things to return
+    public float radius = 15f;
+    public static int num_return = 2;      //Number of nearest things to return
     public bool localized = true;   //Localize to the parent body.
     
     private GameObject creature;
     private GameObject ground;
     
-    private Collider[] hitColliders;
-    public GameObject[] goodHits;
+    public  GameObject[] goodHits;
+
     public Matrix last;
+    public string last_str;
   
     private bool setup = false;
 	void Start () {
@@ -38,6 +40,9 @@ public class Eye_script : MonoBehaviour {
     
     public Matrix look(){
     
+        //TODO: Rotation of the gameObject (?)
+            //Ie: if a/the mouth is facing us or not. (Could just be a 0 or and 1).
+
         if(!setup)
             Start();
 
@@ -47,9 +52,14 @@ public class Eye_script : MonoBehaviour {
         if(localized)
             center = this.transform.parent.position;
         
-        hitColliders = Physics.OverlapSphere(center,radius);//,this.gameObject.layer,QueryTriggerInteraction.Collide); //COLLIDES WITH TRIGGERS
+        Collider[] hitColliders = Physics.OverlapSphere(center,radius);//,this.gameObject.layer,QueryTriggerInteraction.Collide); //COLLIDES WITH TRIGGERS
         
+        // Sort HitColliders by proximity.
+        hitColliders = hitColliders.OrderBy((Collider arg) => (arg.transform.position - creature.transform.position).magnitude).ToArray();
+        
+
         goodHits = new GameObject[num_return];
+
 
         //loop things:
         Collider col;
@@ -60,27 +70,31 @@ public class Eye_script : MonoBehaviour {
             //if(creature.GetComponent<Creature_script_main>().myBodyParts.Contains(col.gameObject)){
                 //Other "good" conditions here.
                 if(col.gameObject.tag == "Creature"){
-                if(col.gameObject != ground){
+                if(col.gameObject != ground && col.gameObject != creature){
                     goodHits[j] = col.gameObject;
                     j++;
                 }
                 }
             //}
-            
 
             i++;
         }
         //Put it in the matrix:
+
+       
         for(int x = 0; x < j*3; x+=3){
-            last[0,x]   = goodHits[x/3].gameObject.transform.position[0];
-            last[0,x+1] = goodHits[x/3].gameObject.transform.position[1];
-            last[0,x+2] = goodHits[x/3].gameObject.transform.position[2];
-            if(localized){
-                last[0,x]   -= creature.transform.position[0];
-                last[0,x+1] -= creature.transform.position[1];
-                last[0,x+2] -= creature.transform.position[2];
-            }
+            Vector3 fun = goodHits[x/3].gameObject.transform.position;
+            if(localized)
+                //fun = fun-creature.transform.position;
+                fun = creature.transform.InverseTransformDirection(fun);  //This seems like it's more like I want, but idk.
+                
+            last[0,x]   = fun[0];
+            last[0,x+1] = fun[1];
+            last[0,x+2] = fun[2];
+
         }
+        
+        //last_str = last.ToString();   //Good for debugging.
         return(last);
     }       
 

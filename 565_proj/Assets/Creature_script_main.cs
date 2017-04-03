@@ -1,6 +1,8 @@
 ﻿#define ADD_MOUTH
 #define ADD_EYE
-#define HIVE_MIND
+//#define HIVE_MIND
+#define MODULUS_MIND
+//#define AGE
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,20 +44,53 @@ public class Creature_script_main : MonoBehaviour {
     #if HIVE_MIND
     public static NeuralNet.Network mind;
    
+    #elif MODULUS_MIND
+    public static int cur_mind=0;
+    public static int max_mind=100;
+    public static NeuralNet.Network[] minds;
+    public NeuralNet.Network mind;
+
     #else
     public NeuralNet.Network mind;
     #endif
         
 	void Start () {
-        
+
         //MIND:
+#if MODULUS_MIND
+        //ASSUMES SINGLE_THREADED. (ELSE PUT A LOCK HERE)
+
+        if(minds == null){
+            minds = new NeuralNet.Network[max_mind];
+            for(int i=0; i < max_mind; i++){
+                mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 32,8, 2},
+                                                    NeuralNet.Misc.sigmoidNF()); //Create a neural-network with input size for the eyes, and 4 outputs.
+
+                //if(mind == null)
+                //    Debug.Log("Mind is nulL!");
+                minds[i] = mind;
+            }
+        }
+        
+        if(mind == null){
+            mind = minds[cur_mind];
+            cur_mind++;
+            cur_mind = cur_mind%max_mind;
+        }
+        //End locked-area.
+        
+        //simple_train();
+            
+#else
         if(mind == null){
             mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 32, 4},
                                                     NeuralNet.Misc.sigmoidNF()); //Create a neural-network with input size for the eyes, and 4 outputs.
-
-
             //simple_train();
+
         }
+#endif
+
+
 
         myBodyParts = new List<GameObject>();
 
@@ -63,15 +98,15 @@ public class Creature_script_main : MonoBehaviour {
 		//body.velocity = new Vector3 (1,0,0);
         //body.velocity = (new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100))).normalized * 10;
         
-        #if ADD_EYE
+#if ADD_EYE
             eye = Creature_bits.newEye();
             AddBodyPart(eye, (this.transform.forward+new Vector3(0,.4f,0)));
-        #endif
+#endif
 
-        #if ADD_MOUTH
+#if ADD_MOUTH
             GameObject mouth = Instantiate(mouthPart);
             AddBodyPart(mouth,this.transform.forward);
-        #endif
+#endif
 
         max_age = 300*12*2; //300 ~= 5secs, *12 make sit about a minute
         max_health = 100;
@@ -96,12 +131,14 @@ public class Creature_script_main : MonoBehaviour {
     }
 
     void train_good(float weight=2){
-        mind.Backward(weight*mind.Forward(eye.GetComponent<Eye_script>().last)); //DOUBLE EVERYTHING!
+        mind.Backward(((mind.Forward(eye.GetComponent<Eye_script>().last))-0.5)*weight); ////TODO: Fix, something close to zero should go nearer zero!
     }
 
     
-    void train_bad(float weight=.2f){
+    void train_bad(float weight=1f){
         //mind.Forward(eye.GetComponent<Eye_script>().last); //Re-load inputs.
+        NeuralNet.Misc.randomize_sub = 0.5;
+        NeuralNet.Misc.randomize_weight = weight;
         mind.Backward(NeuralNet.Matrix.Transform(NeuralNet.Misc.randomize,mind.Forward(eye.GetComponent<Eye_script>().last)));  //DO ANYTHING ELSE!
     }
 
@@ -125,10 +162,15 @@ public class Creature_script_main : MonoBehaviour {
 
     // Update is called once per frame
     void FixedUpdate () {
+        
+
         //brain.
         brain();
+
         food--;
-        age++;
+        #if AGE
+            age++;
+        #endif
         if (food < 0)
         {
             food = 0;
@@ -153,10 +195,10 @@ public class Creature_script_main : MonoBehaviour {
         //food -= (float)(ret[0,1]);  //Accel costs.
 
         //Rotate
-        transform.rotation = Quaternion.AngleAxis((float)(ret[0,0]*1),  Vector3.up)*transform.rotation ;
+        transform.rotation = Quaternion.AngleAxis((float)((ret[0,0]-0.5)*1),  Vector3.up)*transform.rotation ;
     
         //Move
-        body.velocity += (float)ret[0,1]*0.1f*transform.forward;
+        body.velocity = (float)(ret[0,1]-0.5)*5f*transform.forward;
         food -= (float)(ret[0,1]);
 
         /*
@@ -199,9 +241,7 @@ public class Creature_script_main : MonoBehaviour {
         if (food > max_food)
             food = max_food;
         
-        //OMNOMS. THIS IS GOOD.
-        //mind.Forward(eye.GetComponent<Eye_script>().last);
-        mind.Backward(2*mind.Forward(eye.GetComponent<Eye_script>().last)); //DOUBLE EVERYTHING!
+        train_good();
         
 
     }
@@ -210,7 +250,7 @@ public class Creature_script_main : MonoBehaviour {
     {
         
         train_bad();
-        Instantiate(deathParticles, this.transform.position, Quaternion.identity);
+        //Instantiate(deathParticles, this.transform.position, Quaternion.identity);
 
         foreach (GameObject bodyPart in myBodyParts)
             Destroy(bodyPart);
