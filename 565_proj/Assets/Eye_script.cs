@@ -9,6 +9,7 @@ public class Eye_script : MonoBehaviour {
     
     public float radius = 15f;
     public static int num_return = 2;      //Number of nearest things to return
+    public static int ret_scale = 6;
     public bool localized = true;   //Localize to the parent body.
     
     private GameObject creature;
@@ -35,7 +36,7 @@ public class Eye_script : MonoBehaviour {
 	//}
     
     public static int ret_size(){
-        return num_return *3;
+        return num_return * ret_scale;
     }
     
     public Matrix look(){
@@ -46,7 +47,7 @@ public class Eye_script : MonoBehaviour {
         if(!setup)
             Start();
 
-        last = new Matrix(1,num_return*3,false);  //Matrix-esk return values. (For NN) (3 values per position: xyz)
+        last = new Matrix(1,num_return*ret_scale,false);  //Matrix-esk return values. (For NN) (3 values per position: xyz)
         
         Vector3 center = this.gameObject.transform.position;
         if(localized)
@@ -81,16 +82,24 @@ public class Eye_script : MonoBehaviour {
         }
         //Put it in the matrix:
 
-       
-        for(int x = 0; x < j*3; x+=3){
-            Vector3 fun = goodHits[x/3].gameObject.transform.position;
-            if(localized)
+        
+        for(int x = 0; x < j*ret_scale; x+=ret_scale){
+            Vector3 fun = goodHits[x/ret_scale].gameObject.transform.position;
+            Quaternion relative = Quaternion.Inverse(goodHits[x/ret_scale].transform.rotation) * creature.transform.rotation;   //I have no idea what this is.
+
+            if(localized){
                 //fun = fun-creature.transform.position;
                 fun = creature.transform.InverseTransformDirection(fun);  //This seems like it's more like I want, but idk.
                 
+            }
+
             last[0,x]   = fun[0];
             last[0,x+1] = fun[1];
             last[0,x+2] = fun[2];
+            last[0,x+3] = relative[0];
+            last[0,x+4] = relative[1];
+            last[0,x+5] = relative[2];
+            //last[0,x+6] = relative[3];
 
         }
         

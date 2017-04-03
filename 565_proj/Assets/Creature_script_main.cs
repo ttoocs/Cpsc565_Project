@@ -45,10 +45,10 @@ public class Creature_script_main : MonoBehaviour {
     public static NeuralNet.Network mind;
    
     #elif MODULUS_MIND
-    public static int cur_mind=0;
-    public static int max_mind=100;
-    public static NeuralNet.Network[] minds;
-    public NeuralNet.Network mind;
+    public static int cur_mind=0;   //Used for brain distribution.
+    public static int max_mind=10;  //brains!
+    public static NeuralNet.Network[] minds;    //All the brains!
+    public NeuralNet.Network mind;  //A brain.
 
     #else
     public NeuralNet.Network mind;
@@ -138,7 +138,7 @@ public class Creature_script_main : MonoBehaviour {
     void train_bad(float weight=1f){
         //mind.Forward(eye.GetComponent<Eye_script>().last); //Re-load inputs.
         NeuralNet.Misc.randomize_sub = 0.5;
-        NeuralNet.Misc.randomize_weight = weight;
+        NeuralNet.Misc.randomize_weight = weight; 
         mind.Backward(NeuralNet.Matrix.Transform(NeuralNet.Misc.randomize,mind.Forward(eye.GetComponent<Eye_script>().last)));  //DO ANYTHING ELSE!
     }
 
