@@ -261,7 +261,7 @@ namespace NeuralNet
 		//Matrix multiplication
       public static Matrix operator* (Matrix mat1, Matrix mat2)
       {
-         return threaded_Mult(mat1,mat2);
+         //return threaded_Mult(mat1,mat2);
          if (mat1.Columns == mat2.Rows)
          {
             double[] temp = new double[mat1.Rows * mat2.Columns];
@@ -352,7 +352,6 @@ namespace NeuralNet
             foreach(Thread t in threads){  //Wait for the threads!
                 t.Join(0);
             }
-            Thread.Sleep(1000);
             return new Matrix(mat1.Rows, mat2.Columns, temp);
          }
 
@@ -374,8 +373,5 @@ namespace NeuralNet
                 temp[currow,dcol]=sum;
             }
        }
-
-
    }
-
 }

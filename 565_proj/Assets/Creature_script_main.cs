@@ -3,6 +3,7 @@
 //#define HIVE_MIND
 #define MODULUS_MIND
 //#define AGE
+//#define FIXED_UPDATE
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -63,7 +64,7 @@ public class Creature_script_main : MonoBehaviour {
         if(minds == null){
             minds = new NeuralNet.Network[max_mind];
             for(int i=0; i < max_mind; i++){
-                mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 32,8, 5},
+                mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 128,32, 5},
                                                     NeuralNet.Misc.sigmoidNF()); //Create a neural-network with input size for the eyes, and 4 outputs.
 
                 //if(mind == null)
@@ -157,13 +158,15 @@ public class Creature_script_main : MonoBehaviour {
     void Update()
     {
         displayDamage();
+
+		#if FIXED_UPDATE	//Merges the Update with the FixedUpdate.
     }
 
 
     // Update is called once per frame
     void FixedUpdate () {
         
-
+		#endif
         //brain.
         brain();
 
@@ -188,7 +191,8 @@ public class Creature_script_main : MonoBehaviour {
     //this one is a prototype
     void brain()
     {
-        NeuralNet.Matrix ret = mind.Forward(eye.gameObject.GetComponent<Eye_script>().look()); //Dirty hack to get the input from the eye... isn't great..
+		NeuralNet.Matrix input = eye.gameObject.GetComponent<Eye_script> ().look ();
+        NeuralNet.Matrix ret = mind.Forward(input); //Dirty hack to get the input from the eye... isn't great..
 
         //Velocity = (brainoutput 1*45)*Velocity + accel
         //body.velocity = Quaternion.AngleAxis((float)(ret[0,0]*45), Vector3.up)*body.velocity + (body.transform.forward * (float)ret[0,1]);   //The rotation is based off the result.

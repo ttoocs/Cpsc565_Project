@@ -6,7 +6,7 @@ public class Creature_init : MonoBehaviour {
 
 	public GameObject creature;
 
-    int num_spawn = 100;
+    int num_spawn = 300;
     float xbound = 75f;
     float ybound = 75f;
 
