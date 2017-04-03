@@ -46,7 +46,7 @@ public class Creature_script_main : MonoBehaviour {
    
     #elif MODULUS_MIND
     public static int cur_mind=0;   //Used for brain distribution.
-    public static int max_mind=10;  //brains!
+    public static int max_mind=100;  //brains!
     public static NeuralNet.Network[] minds;    //All the brains!
     public NeuralNet.Network mind;  //A brain.
 
@@ -63,7 +63,7 @@ public class Creature_script_main : MonoBehaviour {
         if(minds == null){
             minds = new NeuralNet.Network[max_mind];
             for(int i=0; i < max_mind; i++){
-                mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 32,8, 2},
+                mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 32,8, 5},
                                                     NeuralNet.Misc.sigmoidNF()); //Create a neural-network with input size for the eyes, and 4 outputs.
 
                 //if(mind == null)
@@ -83,7 +83,7 @@ public class Creature_script_main : MonoBehaviour {
             
 #else
         if(mind == null){
-            mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 32, 4},
+            mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 32, 5},
                                                     NeuralNet.Misc.sigmoidNF()); //Create a neural-network with input size for the eyes, and 4 outputs.
             //simple_train();
 
@@ -195,10 +195,12 @@ public class Creature_script_main : MonoBehaviour {
         //food -= (float)(ret[0,1]);  //Accel costs.
 
         //Rotate
-        transform.rotation = Quaternion.AngleAxis((float)((ret[0,0]-0.5)*1),  Vector3.up)*transform.rotation ;
-    
+        //transform.rotation = Quaternion.AngleAxis((float)((ret[0,0]-0.5)*1),  Vector3.up)*transform.rotation ;
+        
+        transform.rotation = new Quaternion((float)ret[0,1],(float)ret[0,2],(float)ret[0,3],(float)ret[0,4]);
+        
         //Move
-        body.velocity = (float)(ret[0,1]-0.5)*5f*transform.forward;
+        body.velocity = (float)(ret[0,0]-0.5)*5f*transform.forward;
         food -= (float)(ret[0,1]);
 
         /*

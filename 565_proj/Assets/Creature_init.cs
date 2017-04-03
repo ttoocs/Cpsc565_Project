@@ -16,7 +16,7 @@ public class Creature_init : MonoBehaviour {
 
 		//int num_spawn = 100;
 		for (int i = 0; i <= num_spawn; i++) {
-			Instantiate(creature, new Vector3 (Random.Range(-xbound, xbound), 0.6f, Random.Range(-ybound, ybound)),  Quaternion.identity );
+			Instantiate(creature, new Vector3 (Random.Range(-xbound, xbound), 2.6f, Random.Range(-ybound, ybound)),  Quaternion.identity );
 		
 		}
 

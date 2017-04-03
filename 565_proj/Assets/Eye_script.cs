@@ -9,7 +9,7 @@ public class Eye_script : MonoBehaviour {
     
     public float radius = 15f;
     public static int num_return = 2;      //Number of nearest things to return
-    public static int ret_scale = 6;
+    public static int ret_scale = 7;
     public bool localized = true;   //Localize to the parent body.
     
     private GameObject creature;
@@ -99,7 +99,7 @@ public class Eye_script : MonoBehaviour {
             last[0,x+3] = relative[0];
             last[0,x+4] = relative[1];
             last[0,x+5] = relative[2];
-            //last[0,x+6] = relative[3];
+            last[0,x+6] = relative[3];
 
         }
         
