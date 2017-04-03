@@ -2,7 +2,7 @@
 #define ADD_EYE
 //#define HIVE_MIND
 #define MODULUS_MIND
-//#define AGE
+#define AGE
 //#define FIXED_UPDATE
 using System.Collections;
 using System.Collections.Generic;
@@ -47,7 +47,7 @@ public class Creature_script_main : MonoBehaviour {
    
     #elif MODULUS_MIND
     public static int cur_mind=0;   //Used for brain distribution.
-    public static int max_mind=100;  //brains!
+    public static int max_mind=1000;  //brains!
     public static NeuralNet.Network[] minds;    //All the brains!
     public NeuralNet.Network mind;  //A brain.
 
@@ -64,7 +64,7 @@ public class Creature_script_main : MonoBehaviour {
         if(minds == null){
             minds = new NeuralNet.Network[max_mind];
             for(int i=0; i < max_mind; i++){
-                mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 128,32, 5},
+                mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 64,32, 5},
                                                     NeuralNet.Misc.sigmoidNF()); //Create a neural-network with input size for the eyes, and 4 outputs.
 
                 //if(mind == null)
@@ -109,7 +109,8 @@ public class Creature_script_main : MonoBehaviour {
             AddBodyPart(mouth,this.transform.forward);
 #endif
 
-        max_age = 300*12*2; //300 ~= 5secs, *12 make sit about a minute
+        //max_age = 300*12*2; //300 ~= 5secs, *12 make sit about a minute
+		max_age = 300; //300frames.
         max_health = 100;
         max_food = 10000;
 
@@ -131,7 +132,7 @@ public class Creature_script_main : MonoBehaviour {
         }
     }
 
-    void train_good(float weight=2){
+    void train_good(float weight=10){
         mind.Backward(((mind.Forward(eye.GetComponent<Eye_script>().last))-0.5)*weight); ////TODO: Fix, something close to zero should go nearer zero!
     }
 
@@ -204,7 +205,7 @@ public class Creature_script_main : MonoBehaviour {
         transform.rotation = new Quaternion((float)(ret[0,1]-0.5)*2*Mathf.PI,(float)(ret[0,2]-0.5)*2*Mathf.PI,(float)(ret[0,3]-0.5)*2*Mathf.PI,(float)(ret[0,4]-0.5)*2*Mathf.PI);
         
         //Move
-        body.velocity = (float)(ret[0,0]-0.5)*5f*transform.forward;
+        body.velocity = (float)(ret[0,0]-0.4)*5f*body.transform.forward;
         food -= (float)(ret[0,1]);
 
         /*
@@ -255,7 +256,7 @@ public class Creature_script_main : MonoBehaviour {
     void die()
     {
         
-        train_bad();
+        //train_bad();
         //Instantiate(deathParticles, this.transform.position, Quaternion.identity);
 
         foreach (GameObject bodyPart in myBodyParts)
