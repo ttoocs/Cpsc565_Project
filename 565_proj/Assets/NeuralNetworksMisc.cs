@@ -31,6 +31,8 @@ namespace NeuralNet
 		//Neural_func of sigmoid:
 		//public Neural_func Neural_sigmoid = new Neural_func(sigmoid, sigmoid_deriv);
 
+        public static System.Random rnd = new System.Random(42); 
+        
 		public static double sigmoid(double val)
 		{
 			return 1 / (1 + Math.Pow(Math.E, -val));
@@ -41,6 +43,10 @@ namespace NeuralNet
 		}
         public static Neural_func sigmoidNF(){
             return new Neural_func(Misc.sigmoid, Misc.sigmoid_deriv);
+        }
+        public static double randomize(double val)
+        {
+            return val += (NeuralNet.Misc.rnd.NextDouble() -.5f) ;
         }
 	}
 

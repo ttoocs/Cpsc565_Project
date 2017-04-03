@@ -84,7 +84,7 @@ public class Creature_script_main : MonoBehaviour {
         trueColor = GetComponent<Renderer>().material.color;
     } 
 	
-
+        //BRAIN HELPERS
     void simple_train(){
         //Nothing infront -> Don't do much.
         NeuralNet.Matrix zeroin = new NeuralNet.Matrix(1,4*3, new double[,] {{0,0,0,0,0,0,0,0,0,0,0,0}});
@@ -94,6 +94,17 @@ public class Creature_script_main : MonoBehaviour {
             mind.Backward(zerout);
         }
     }
+
+    void train_good(float weight=2){
+        mind.Backward(weight*mind.Forward(eye.GetComponent<Eye_script>().last)); //DOUBLE EVERYTHING!
+    }
+
+    
+    void train_bad(float weight=.2f){
+        //mind.Forward(eye.GetComponent<Eye_script>().last); //Re-load inputs.
+        mind.Backward(NeuralNet.Matrix.Transform(NeuralNet.Misc.randomize,mind.Forward(eye.GetComponent<Eye_script>().last)));  //DO ANYTHING ELSE!
+    }
+
 
     //Add's a bodypart!
     void AddBodyPart(GameObject part){
@@ -197,6 +208,8 @@ public class Creature_script_main : MonoBehaviour {
 
     void die()
     {
+        
+        train_bad();
         Instantiate(deathParticles, this.transform.position, Quaternion.identity);
 
         foreach (GameObject bodyPart in myBodyParts)
@@ -206,6 +219,7 @@ public class Creature_script_main : MonoBehaviour {
 
     public void takeDamage(int damage)
     {
+        train_bad();
         timeOfDamage = Time.time;
         health -= damage;
     }

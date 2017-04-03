@@ -14,7 +14,11 @@ public class particleScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Time.time >= start_time + 2f)
-            Destroy(gameObject);
+        if (Time.time >= start_time + 2f){
+            foreach(Component a in gameObject.GetComponents<Component>()){
+                Destroy(a);
+            }
+        }
+        Destroy(this.gameObject);
 	}
 }

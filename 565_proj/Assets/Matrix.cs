@@ -100,7 +100,7 @@ namespace NeuralNet
          
 
          if(randomize){
-            System.Random rnd= new System.Random(42);
+            System.Random rnd= NeuralNet.Misc.rnd;
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
