@@ -2,7 +2,7 @@
 #define ADD_EYE
 //#define HIVE_MIND
 #define MODULUS_MIND
-#define AGE
+//#define AGE
 //#define FIXED_UPDATE
 using System.Collections;
 using System.Collections.Generic;
@@ -46,10 +46,13 @@ public class Creature_script_main : MonoBehaviour {
     public static NeuralNet.Network mind;
    
     #elif MODULUS_MIND
+	public int brainID;
     public static int cur_mind=0;   //Used for brain distribution.
-    public static int max_mind=1000;  //brains!
+    public static int max_mind=50;  //brains!
     public static NeuralNet.Network[] minds;    //All the brains!
     public NeuralNet.Network mind;  //A brain.
+
+	public double[] old = new double[2]{0,0}; 
 
     #else
     public NeuralNet.Network mind;
@@ -64,7 +67,7 @@ public class Creature_script_main : MonoBehaviour {
         if(minds == null){
             minds = new NeuralNet.Network[max_mind];
             for(int i=0; i < max_mind; i++){
-                mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 64,32, 5},
+                mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 32,32, 5},
                                                     NeuralNet.Misc.sigmoidNF()); //Create a neural-network with input size for the eyes, and 4 outputs.
 
                 //if(mind == null)
@@ -74,6 +77,7 @@ public class Creature_script_main : MonoBehaviour {
         }
         
         if(mind == null){
+			brainID = cur_mind;
             mind = minds[cur_mind];
             cur_mind++;
             cur_mind = cur_mind%max_mind;
@@ -112,7 +116,7 @@ public class Creature_script_main : MonoBehaviour {
         //max_age = 300*12*2; //300 ~= 5secs, *12 make sit about a minute
 		max_age = 300; //300frames.
         max_health = 100;
-        max_food = 10000;
+        max_food = 1000;
 
         age = 0;
         food = max_food/2;
@@ -132,16 +136,19 @@ public class Creature_script_main : MonoBehaviour {
         }
     }
 
-    void train_good(float weight=10){
+	void train_good(){
+		float weight = (float)NeuralNet.Misc.rnd.NextDouble ()*7f;
         mind.Backward(((mind.Forward(eye.GetComponent<Eye_script>().last))-0.5)*weight); ////TODO: Fix, something close to zero should go nearer zero!
     }
 
     
-    void train_bad(float weight=1f){
+    void train_bad(float weight=3f){
         //mind.Forward(eye.GetComponent<Eye_script>().last); //Re-load inputs.
-        NeuralNet.Misc.randomize_sub = 0.5;
-        NeuralNet.Misc.randomize_weight = weight; 
+		NeuralNet.Misc.randomize_sub = NeuralNet.Misc.rnd.NextDouble();
+        NeuralNet.Misc.randomize_weight = weight;
+		//Debug.Log("wo: "+ mind.Forward (eye.GetComponent<Eye_script> ().last).ToString ());
         mind.Backward(NeuralNet.Matrix.Transform(NeuralNet.Misc.randomize,mind.Forward(eye.GetComponent<Eye_script>().last)));  //DO ANYTHING ELSE!
+		//Debug.Log("wo2: "+ mind.Forward (eye.GetComponent<Eye_script> ().last).ToString ());
     }
 
 
@@ -180,6 +187,11 @@ public class Creature_script_main : MonoBehaviour {
             food = 0;
             takeDamage(1);
         }
+		if (health < max_health && food > 1) {
+			food--;
+			health++;
+		}
+
         if (health <= 0 || age > max_age)
             die();
         if (food > max_food*0.7 && health > max_health/2)
@@ -193,31 +205,50 @@ public class Creature_script_main : MonoBehaviour {
     void brain()
     {
 		NeuralNet.Matrix input = eye.gameObject.GetComponent<Eye_script> ().look ();
+
+		//NeuralNet.Matrix input2 = NeuralNet.Matrix.AddBias (NeuralNet.Matrix.AddBias (input));
+		/*
+		NeuralNet.Matrix input2 = new NeuralNet.Matrix(1,input.Columns+4);
+		for (int i = 0; i < input.Columns; i++) {	//Only 1 row.
+			input2.Elements [0,i] = input.Elements[0,i];	
+		}*/
+		//input2 [0,0] = 0;
+		//input2 [0,1] = 1; 
         NeuralNet.Matrix ret = mind.Forward(input); //Dirty hack to get the input from the eye... isn't great..
 
+
         //Velocity = (brainoutput 1*45)*Velocity + accel
-        //body.velocity = Quaternion.AngleAxis((float)(ret[0,0]*45), Vector3.up)*body.velocity + (body.transform.forward * (float)ret[0,1]);   //The rotation is based off the result.
+		//body.velocity = Quaternion.AngleAxis((float)((ret[0,0]-0.5)*45), Vector3.up)*body.velocity + (body.transform.forward * (float)ret[0,1]);   //The rotation is based off the result.
         //food -= (float)(ret[0,1]);  //Accel costs.
 
         //Rotate
-        //transform.rotation = Quaternion.AngleAxis((float)((ret[0,0]-0.5)*1),  Vector3.up)*transform.rotation ;
+        //transform.rotation = Quaternion.AngleAxis((float)((ret[0,1])*10),  Vector3.up)*transform.rotation ;
         
-        transform.rotation = new Quaternion((float)(ret[0,1]-0.5)*2*Mathf.PI,(float)(ret[0,2]-0.5)*2*Mathf.PI,(float)(ret[0,3]-0.5)*2*Mathf.PI,(float)(ret[0,4]-0.5)*2*Mathf.PI);
-        
+		//transform.rotation = new Quaternion (((float)(ret [0, 1]+ret [0, 2]-ret [0, 3]-ret [0, 4])*2)  , Vector3.up[0],Vector3.up[1],Vector3.up[2]);
+		transform.rotation = new Quaternion (((float)(ret [0, 1]-ret [0, 2]))  , Vector3.up[0],Vector3.up[1],Vector3.up[2]);
+
         //Move
-        body.velocity = (float)(ret[0,0]-0.4)*5f*body.transform.forward;
-        food -= (float)(ret[0,1]);
+		if(ret[0,0] > 0)
+        	body.velocity = (float)(ret[0,0]-0.3)*5f*body.transform.forward;
+
+
+		//if (body.velocity.magnitude < 0.1) {
+			//food+=2;
+		//	train_bad();
+		//}
+
+        //food -= (float)(ret[0,0]);
 
         /*
         if (Random.Range(0, 100) < 10)
         {
             body.velocity =  Quaternion.AngleAxis(Random.Range(-45,45), Vector3.up)*body.velocity;
            // body.velocity = new Vector3(0,0,10);
-        } */
+        } 
         //Face velocity dir.
-		//if (body.velocity != new Vector3 (0, 0, 0)) {
-		//	transform.rotation = Quaternion.LookRotation (body.velocity);
-		//}
+		if (body.velocity != new Vector3 (0, 0, 0)) {
+			transform.rotation = Quaternion.LookRotation (body.velocity);
+		}//*/
     }
 
     void displayDamage()
@@ -240,6 +271,10 @@ public class Creature_script_main : MonoBehaviour {
     void reproduce()
     {
         Instantiate(gameObject);
+		trueColor.b = 0;
+		trueColor.g = 1;
+		food -= (max_food / 2);
+		GetComponent<Renderer>().material.color = trueColor;
     }
 
     public void nomNomNom(int foodAmount)

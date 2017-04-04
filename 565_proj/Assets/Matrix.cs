@@ -343,11 +343,11 @@ namespace NeuralNet
          if (mat1.Columns == mat2.Rows)
          {
             double[,] temp = new double[mat1.rows,mat2.columns];
-            for(int dcol=0; dcol < mat2.columns; dcol++){
-                    //Thread t = new Thread(() => threaded_Mult_Helper(mat1,mat2,temp,dcol));
-                    //t.Start();
-                    //threads.AddFirst(t);
-                     threaded_Mult_Helper(mat1,mat2,temp,dcol);
+            for(int j=0; j < mat2.columns; j++){
+                    Thread t = new Thread(() => threaded_Mult_Helper(mat1,mat2,temp,j));
+                    t.Start();
+                    threads.AddFirst(t);
+                    //threaded_Mult_Helper(mat1,mat2,temp,j);
             }
             foreach(Thread t in threads){  //Wait for the threads!
                 t.Join(0);
@@ -359,18 +359,17 @@ namespace NeuralNet
          throw new Exception("Invalid matrices for multiplication");                    
         }
 
-       public static void threaded_Mult_Helper(Matrix mat1, Matrix mat2, double[,] temp, int dcol){
+       public static void threaded_Mult_Helper(Matrix mat1, Matrix mat2, double[,] temp, int j){
             //Dcol: the colum of values we're computing.
-            for(int currow=0; currow<mat2.rows; currow++){
+            for(int i=0; i<mat1.rows; i++){
                 double sum=0;
                 //Debug.Log("fs");
                 //temp[currow,dcol]=3;
-                for(int a=0; a < mat1.columns; a++){
-                    sum+= mat1[currow,a]*mat2[a,dcol];  //OUT OF BOUDNS EXCEPTION. FFS,
-                    
+				for(int k=0; k < mat1.columns; k++){
+                    sum+= mat1[i,k]*mat2[k,j];  //OUT OF BOUDNS EXCEPTION. FFS,
                 }
                 //Debug.Log("wo:"+currow+":"+dcol+"= "+sum);
-                temp[currow,dcol]=sum;
+				temp[i,j]=sum;
             }
        }
    }

@@ -13,19 +13,19 @@ public class NN_TEST : MonoBehaviour {
 
 	void Start () {
         
-        Matrix fun = new Matrix(2,3, new double[,]{{0,1,2},{3,4,5}});
-        Matrix f2 = Matrix.Transpose(fun);
+       // Matrix fun = new Matrix(2,3, new double[,]{{0,1,2},{3,4,5}});
+        //Matrix f2 = Matrix.Transpose(fun);
         
         
-        Debug.Log("Matrix Mult: "+(f2*fun).ToString());
-        Debug.Log("Matrix TMult: "+Matrix.threaded_Mult(f2,fun).ToString());    
+        //Debug.Log("Matrix Mult: "+(f2*fun).ToString());
+        //Debug.Log("Matrix TMult: "+Matrix.threaded_Mult(f2,fun).ToString());    
 
         Debug.Log("Testing neural network:");
         //not_tefster();
         //Simple_Back();
         //tester_2();
-        //network_test1();
-        //network_train1(true);
+        network_test1();
+        network_train1(true);
     }
 
     Network net1;
