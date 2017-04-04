@@ -48,11 +48,9 @@ public class Creature_script_main : MonoBehaviour {
     #elif MODULUS_MIND
 	public int brainID;
     public static int cur_mind=0;   //Used for brain distribution.
-    public static int max_mind=50;  //brains!
+    public static int max_mind=100;  //brains!
     public static NeuralNet.Network[] minds;    //All the brains!
     public NeuralNet.Network mind;  //A brain.
-
-	public double[] old = new double[2]{0,0}; 
 
     #else
     public NeuralNet.Network mind;
@@ -67,7 +65,7 @@ public class Creature_script_main : MonoBehaviour {
         if(minds == null){
             minds = new NeuralNet.Network[max_mind];
             for(int i=0; i < max_mind; i++){
-                mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 32,32, 5},
+                mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(),16, 5},
                                                     NeuralNet.Misc.sigmoidNF()); //Create a neural-network with input size for the eyes, and 4 outputs.
 
                 //if(mind == null)
@@ -128,8 +126,9 @@ public class Creature_script_main : MonoBehaviour {
         //BRAIN HELPERS
     void simple_train(){
         //Nothing infront -> Don't do much.
-        NeuralNet.Matrix zeroin = new NeuralNet.Matrix(1,4*3, new double[,] {{0,0,0,0,0,0,0,0,0,0,0,0}});
-        NeuralNet.Matrix zerout = new NeuralNet.Matrix(1,4, false);
+        NeuralNet.Matrix zeroin = new NeuralNet.Matrix(1,Eye_script.ret_size(),false);
+        NeuralNet.Matrix zerout = new NeuralNet.Matrix(1,5, false);
+        zerout[0,0]=0.5;
         for(int i=0; i<10; i++){
             mind.Forward(zeroin);
             mind.Backward(zerout);
@@ -204,7 +203,7 @@ public class Creature_script_main : MonoBehaviour {
     //this one is a prototype
     void brain()
     {
-		NeuralNet.Matrix input = eye.gameObject.GetComponent<Eye_script> ().look ();
+		NeuralNet.Matrix input = eye.gameObject.GetComponent<Eye_script> ().look (); //Dirty hack to get the input from the eye... isn't great..
 
 		//NeuralNet.Matrix input2 = NeuralNet.Matrix.AddBias (NeuralNet.Matrix.AddBias (input));
 		/*
@@ -214,7 +213,7 @@ public class Creature_script_main : MonoBehaviour {
 		}*/
 		//input2 [0,0] = 0;
 		//input2 [0,1] = 1; 
-        NeuralNet.Matrix ret = mind.Forward(input); //Dirty hack to get the input from the eye... isn't great..
+        NeuralNet.Matrix ret = mind.Forward(input); 
 
 
         //Velocity = (brainoutput 1*45)*Velocity + accel
@@ -222,10 +221,12 @@ public class Creature_script_main : MonoBehaviour {
         //food -= (float)(ret[0,1]);  //Accel costs.
 
         //Rotate
-        //transform.rotation = Quaternion.AngleAxis((float)((ret[0,1])*10),  Vector3.up)*transform.rotation ;
-        
+        transform.rotation = Quaternion.AngleAxis((float)((ret[0,1]-ret[0,2])*10),  Vector3.up)*transform.rotation ;
+
+        //transform.rotation = Quaternion.AngleAxis((float)((input[0,0]),  Vector3.up)*transform.rotation ; //TRY IT RAW!
+
 		//transform.rotation = new Quaternion (((float)(ret [0, 1]+ret [0, 2]-ret [0, 3]-ret [0, 4])*2)  , Vector3.up[0],Vector3.up[1],Vector3.up[2]);
-		transform.rotation = new Quaternion (((float)(ret [0, 1]-ret [0, 2]))  , Vector3.up[0],Vector3.up[1],Vector3.up[2]);
+		//transform.rotation = new Quaternion (((float)(ret [0, 1]-ret [0, 2]))  , Vector3.up[0],Vector3.up[1],Vector3.up[2]);
 
         //Move
 		if(ret[0,0] > 0)

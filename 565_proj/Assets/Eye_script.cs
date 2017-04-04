@@ -8,7 +8,7 @@ using NeuralNet;
 public class Eye_script : MonoBehaviour {
     
     public float radius = 15f;
-    public static int num_return = 4;      //Number of nearest things to return
+    public static int num_return = 1;      //Number of nearest things to return
     public static int ret_scale = 1;
     public bool localized = true;   //Localize to the parent body.
     
@@ -92,9 +92,16 @@ public class Eye_script : MonoBehaviour {
 			if (c.x * c.y * c.z < 0)
 				angle = -angle + 2*Mathf.PI;
 			
+            angle -= Mathf.PI;
+
+
+            //Vector3 dir = (fun.gameObject.transform.position - transform.position);
+            //dir = fun.gameObject.transform.InverseTransformDirection(dir);
+            //angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+    
             if(localized){
                 //fun = fun-creature.transform.position;
-                fun = creature.transform.InverseTransformDirection(fun)/3f;  //This seems like it's more like I want, but idk.
+                fun = creature.transform.InverseTransformDirection(fun);  //This seems like it's more like I want, but idk.
                 
             }
 
