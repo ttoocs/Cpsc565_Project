@@ -46,9 +46,9 @@ public class Creature_script_main : MonoBehaviour {
     public static NeuralNet.Network mind;
 
     #elif MODULUS_MIND
-  public int brainID;
+    public int brainID;
     public static int cur_mind=0;   //Used for brain distribution.
-    public static int max_mind=100;  //brains!
+    public static int max_mind=256;  //brains!
     public static NeuralNet.Network[] minds;    //All the brains!
     public NeuralNet.Network mind;  //A brain.
 
@@ -177,7 +177,7 @@ public class Creature_script_main : MonoBehaviour {
         //brain.
         brain();
 
-        food--;
+        //food--;
         #if AGE
             age++;
         #endif
@@ -203,7 +203,7 @@ public class Creature_script_main : MonoBehaviour {
     //this one is a prototype
     void brain()
     {
-    NeuralNet.Matrix input = eye.gameObject.GetComponent<Eye_script> ().look (); //Dirty hack to get the input from the eye... isn't great..
+      NeuralNet.Matrix input = eye.gameObject.GetComponent<Eye_script> ().look (); //Dirty hack to get the input from the eye... isn't great..
 
     //NeuralNet.Matrix input2 = NeuralNet.Matrix.AddBias (NeuralNet.Matrix.AddBias (input));
     /*
@@ -216,7 +216,7 @@ public class Creature_script_main : MonoBehaviour {
         NeuralNet.Matrix ret = mind.Forward(input);
 
       //Hardcoding ret to test:
-      ret[0,0] = input[0,0] ;
+      ret[0,0] = input[0,0] / Mathf.PI + 0.5 ;
 
       //Abstract the values out of the NN.
       double rotate_value = ((ret[0,0] - 0.5)*180.0) / 10.0;
