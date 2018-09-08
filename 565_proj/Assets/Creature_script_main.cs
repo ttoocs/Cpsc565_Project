@@ -15,6 +15,7 @@ public class Creature_script_main : MonoBehaviour {
     public GameObject mouthPart;
     public List<GameObject> myBodyParts; //Public used in eyes.
 
+    public bool getLastBrainStr = false;
     public string lastBrainStr;
 
     private float age;
@@ -219,7 +220,9 @@ public class Creature_script_main : MonoBehaviour {
     //input2 [0,1] = 1;
       NeuralNet.Matrix brainRet = mind.Forward(input);
 
-      lastBrainStr = brainRet.ToString();
+      if (getLastBrainStr){
+        lastBrainStr = brainRet.ToString();
+      }
       //Hardcoding ret to test:
       //ret[0,0] = input[0,0] / Mathf.PI + 0.5 ;
 
