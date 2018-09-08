@@ -15,6 +15,8 @@ public class Creature_script_main : MonoBehaviour {
     public GameObject mouthPart;
     public List<GameObject> myBodyParts; //Public used in eyes.
 
+    public string lastBrainStr;
+
     private float age;
     private float health;
     private float food;
@@ -56,6 +58,8 @@ public class Creature_script_main : MonoBehaviour {
     public NeuralNet.Network mind;
     #endif
 
+    private static int[] brainConfig = {Eye_script.ret_size(), 32, 16, 8, 4, 2};
+
   void Start () {
 
         //MIND:
@@ -65,7 +69,7 @@ public class Creature_script_main : MonoBehaviour {
         if(minds == null){
             minds = new NeuralNet.Network[max_mind];
             for(int i=0; i < max_mind; i++){
-                mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 4, 5},
+                mind = new NeuralNet.Network( brainConfig,
                                                     NeuralNet.Misc.sigmoidNF()); //Create a neural-network with input size for the eyes, and 4 outputs.
 
                 //if(mind == null)
@@ -75,7 +79,7 @@ public class Creature_script_main : MonoBehaviour {
         }
 
         if(mind == null){
-      brainID = cur_mind;
+            brainID = cur_mind;
             mind = minds[cur_mind];
             cur_mind++;
             cur_mind = cur_mind%max_mind;
@@ -86,7 +90,7 @@ public class Creature_script_main : MonoBehaviour {
 
 #else
         if(mind == null){
-            mind = new NeuralNet.Network(new int[] {Eye_script.ret_size(), 32, 5},
+            mind = new NeuralNet.Network( brainConfig,
                                                     NeuralNet.Misc.sigmoidNF()); //Create a neural-network with input size for the eyes, and 4 outputs.
             //simple_train();
 
@@ -112,7 +116,7 @@ public class Creature_script_main : MonoBehaviour {
 #endif
 
         //max_age = 300*12*2; //300 ~= 5secs, *12 make sit about a minute
-    max_age = 300; //300frames.
+        max_age = 300; //300frames.
         max_health = 100;
         max_food = 1000;
 
@@ -213,14 +217,15 @@ public class Creature_script_main : MonoBehaviour {
     }*/
     //input2 [0,0] = 0;
     //input2 [0,1] = 1;
-        NeuralNet.Matrix ret = mind.Forward(input);
+      NeuralNet.Matrix brainRet = mind.Forward(input);
 
+      lastBrainStr = brainRet.ToString();
       //Hardcoding ret to test:
-      ret[0,0] = input[0,0] / Mathf.PI + 0.5 ;
+      //ret[0,0] = input[0,0] / Mathf.PI + 0.5 ;
 
       //Abstract the values out of the NN.
-      double rotate_value = ((ret[0,0] - 0.5)*180.0) / 10.0;
-      double accel_value = (ret[0,1] - 0.5) * 1;
+      double rotate_value = ((brainRet[0,0] - 0.5)*180.0) / 10.0;
+      double accel_value = (brainRet[0,1] - 0.5) * 1;
 
 
       //ROTATION//
