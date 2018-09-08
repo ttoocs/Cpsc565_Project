@@ -98,7 +98,8 @@ public class Eye_script : MonoBehaviour {
           */
           //Vector3 deltaV = curObj - creature.transform.position;
           //double angle = Matf.Atan(Vector3.Project(deltaV,creature.transform.forward).magnitude / deltaV.magnitude);
-          double angle = Vector3.signedAngle(creature.transform.forward, fun);
+          double angle = Vector3.SignedAngle(creature.transform.forward, fun-creature.transform.position, Vector3.up);
+          angle *= Mathf.PI / 180;
 
           //Vector3 dir = (fun.gameObject.transform.position - transform.position);
           //dir = fun.gameObject.transform.InverseTransformDirection(dir);
