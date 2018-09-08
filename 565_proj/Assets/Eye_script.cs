@@ -78,42 +78,48 @@ public class Eye_script : MonoBehaviour {
 
             i++;
         }
+
         //Put it in the matrix:
+        for(int x = 0; x < j*ret_scale; x+=ret_scale){ //Per each row
+          GameObject curObj = goodHits[x/ret_scale]; //Get next element
+          
+          //Get XYZ:
+          Vector3 fun = curObj.gameObject.transform.position;
+          Quaternion relative = Quaternion.Inverse(creature.transform.rotation) * curObj.transform.rotation;   //I have no idea what this is.
 
-
-        for(int x = 0; x < j*ret_scale; x+=ret_scale){
-            Vector3 fun = goodHits[x/ret_scale].gameObject.transform.position;
-      Quaternion relative = Quaternion.Inverse(creature.transform.rotation) * goodHits[x/ret_scale].transform.rotation;   //I have no idea what this is.
-
-      double angle = Mathf.Acos(Vector3.Dot(creature.transform.forward,Vector3.Normalize(fun-creature.transform.position)));
-      Vector3 c = Vector3.Cross (creature.transform.forward, Vector3.Normalize(fun-creature.transform.position));
-      if (c.x * c.y * c.z < 0)
-        angle = -angle + 2*Mathf.PI;
-
+          //Calculate an angle:
+          /*
+          double angle = Mathf.Acos(Vector3.Dot(creature.transform.forward,Vector3.Normalize(fun-creature.transform.position)));
+          Vector3 c = Vector3.Cross (creature.transform.forward, Vector3.Normalize(fun-creature.transform.position));
+          if (c.x * c.y * c.z < 0){
+            angle = -angle + 2*Mathf.PI; //Correct the angle
             angle -= Mathf.PI;
+          }
+          */
+          //Vector3 deltaV = curObj - creature.transform.position;
+          //double angle = Matf.Atan(Vector3.Project(deltaV,creature.transform.forward).magnitude / deltaV.magnitude);
+          double angle = Vector3.signedAngle(creature.transform.forward, fun);
 
+          //Vector3 dir = (fun.gameObject.transform.position - transform.position);
+          //dir = fun.gameObject.transform.InverseTransformDirection(dir);
+          //angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-            //Vector3 dir = (fun.gameObject.transform.position - transform.position);
-            //dir = fun.gameObject.transform.InverseTransformDirection(dir);
-            //angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+          if(localized){
+            //fun = fun-creature.transform.position;
+            fun = creature.transform.InverseTransformDirection(fun);  //This seems like it's more like I want, but idk.
+          }
 
-            if(localized){
-                //fun = fun-creature.transform.position;
-                fun = creature.transform.InverseTransformDirection(fun);  //This seems like it's more like I want, but idk.
-
-            }
-
-      last [0, x] = angle;
-            //last[0,x]   = fun[0];
-            //last[0,x+1] = fun[1];
-            //last[0,x+2] = fun[2];
+          last [0, x] = angle;
+          //last[0,x]   = fun[0];
+          //last[0,x+1] = fun[1]; //Manually encode the colum
+          //last[0,x+2] = fun[2];
 
       ///*
-            //last[0,x+3] = relative[0];
-            //last[0,x+4] = relative[1];
-            //last[0,x+5] = relative[2];
-            //last[0,x+6] = relative[3];
-            //*/
+          //last[0,x+3] = relative[0];
+          //last[0,x+4] = relative[1];
+          //last[0,x+5] = relative[2];
+          //last[0,x+6] = relative[3];
+          //*/
 
         }
 
