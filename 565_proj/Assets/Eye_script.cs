@@ -59,10 +59,8 @@ public class Eye_script : MonoBehaviour {
         hitColliders = hitColliders.OrderBy((Collider arg) => (arg.transform.position - creature.transform.position).magnitude).ToArray();
         
 
+        //loop though results filtering out unwanted entities
         goodHits = new GameObject[num_return];
-
-
-        //loop things:
         Collider col;
         int i=0;    //HitColliders index
         int j=0;    //Good_hits index
@@ -83,7 +81,7 @@ public class Eye_script : MonoBehaviour {
         //Put it in the matrix:
 
         
-        for(int x = 0; x < j*ret_scale; x+=ret_scale){
+        for(int x = 0; x < j*ret_scale; x+=ret_scale){ 
             Vector3 fun = goodHits[x/ret_scale].gameObject.transform.position;
 			Quaternion relative = Quaternion.Inverse(creature.transform.rotation) * goodHits[x/ret_scale].transform.rotation;   //I have no idea what this is.
 
