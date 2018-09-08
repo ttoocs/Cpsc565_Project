@@ -215,9 +215,26 @@ public class Creature_script_main : MonoBehaviour {
     //input2 [0,1] = 1;
         NeuralNet.Matrix ret = mind.Forward(input);
 
+      //Hardcoding ret to test:
+      ret[0,0] = input[0,0] ;
+
+      //Abstract the values out of the NN.
+      double rotate_value = ((ret[0,0] - 0.5)*180.0) / 10.0;
+      double accel_value = (ret[0,1] - 0.5) * 1;
+
+
+      //ROTATION//
+      transform.rotation = Quaternion.AngleAxis( (float) rotate_value, Vector3.up) * transform.rotation;
+
+      //VELOCITY//
+      body.velocity = body.velocity * 0.9f ; //Dampen vel
+      body.velocity += ( float) accel_value * body.transform.forward;
+
 
         //Velocity = (brainoutput 1*45)*Velocity + accel
-      body.velocity = Quaternion.AngleAxis((float)((ret[0,0]-0.5)*45), Vector3.up)*body.velocity + (body.transform.forward * (float)ret[0,1]);   //The rotation is based off the result.
+
+        //Rotates the velocity and applies the body/etc
+        //body.velocity = Quaternion.AngleAxis((float)((ret[0,0]-0.5)*180.0/100), Vector3.up)*body.velocity + (body.transform.forward * (float)ret[0,1] * 0);   //The rotation is based off the result.
         //food -= (float)(ret[0,1]);  //Accel costs.
 
         //Rotate
@@ -229,8 +246,8 @@ public class Creature_script_main : MonoBehaviour {
     //transform.rotation = new Quaternion (((float)(ret [0, 1]-ret [0, 2]))  , Vector3.up[0],Vector3.up[1],Vector3.up[2]);
 
         //Move
-    if(ret[0,0] > 0)
-          body.velocity = (float)(ret[0,0]-0.3)*5f*body.transform.forward;
+//    if(ret[0,0] > 0)
+//          body.velocity = (float)(ret[0,0]-0.3)*5f*body.transform.forward;
 
 
     //if (body.velocity.magnitude < 0.1) {
