@@ -1,4 +1,4 @@
-﻿#define ADD_MOUTH
+#define ADD_MOUTH
 #define ADD_EYE
 //#define HIVE_MIND
 #define MODULUS_MIND

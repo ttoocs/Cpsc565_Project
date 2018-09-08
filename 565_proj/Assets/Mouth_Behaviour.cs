@@ -1,4 +1,4 @@
-﻿//#define MOUTH_COLLIDE_DEBUG 
+//#define MOUTH_COLLIDE_DEBUG 
 //#define MOUTH_COLLIDER
 using System.Collections;
 using System.Collections.Generic;
