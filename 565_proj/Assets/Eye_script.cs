@@ -8,9 +8,9 @@ using NeuralNet;
 public class Eye_script : MonoBehaviour {
 
     public float radius = 15f;
-    public static int num_return = 1;      //Number of nearest things to return
-    public static int ret_scale = 1;
-    public bool localized = true;   //Localize to the parent body.
+    public static int num_return = 5;      //Number of nearest things to return
+    public static int ret_scale = 2;       //Number of elements per thing to return.
+    public bool localized = true;          //Localize to the parent body.
 
     private GameObject creature;
     private GameObject ground;
@@ -18,22 +18,23 @@ public class Eye_script : MonoBehaviour {
     public  GameObject[] goodHits;
 
     public Matrix last;
+    public bool getStr = false;
     public string last_str;
 
     private bool setup = false;
-  void Start () {
+    void Start () {
         if(setup)
             return;
         creature = this.gameObject.transform.parent.gameObject;
         //Debug.Log(creature.GetComponent<Creature_script_main>().myBodyParts);
         ground =  GameObject.Find("ground");
     setup = true;
-  }
+    }
 
-  // Update is called once per frame
-  //void FixedUpdate() {
-  //    Debug.Log(look());
-  //}
+    // Update is called once per frame
+    //void FixedUpdate() {
+    //    Debug.Log(look());
+    //}
 
     public static int ret_size(){
         return num_return * ret_scale;
@@ -47,7 +48,7 @@ public class Eye_script : MonoBehaviour {
         if(!setup)
             Start();
 
-        last = new Matrix(1,num_return*ret_scale,false);  //Matrix-esk return values. (For NN) (3 values per position: xyz)
+        last = new Matrix(1,num_return*ret_scale,false);  //Matrix-esk return values. (For NN)
 
         Vector3 center = this.gameObject.transform.position;
         if(localized)
@@ -80,11 +81,12 @@ public class Eye_script : MonoBehaviour {
         }
 
         //Put it in the matrix:
-        for(int x = 0; x < j*ret_scale; x+=ret_scale){ //Per each row
+        for(int x = 0; x < j*ret_scale; x+=ret_scale){ //Per each chunk-assigment.
           GameObject curObj = goodHits[x/ret_scale]; //Get next element
           
           //Get XYZ:
-          Vector3 fun = curObj.gameObject.transform.position;
+          Vector3 funPos = curObj.gameObject.transform.position;
+          Vector3 funVec = funPos-creature.transform.position;
           Quaternion relative = Quaternion.Inverse(creature.transform.rotation) * curObj.transform.rotation;   //I have no idea what this is.
 
           //Calculate an angle:
@@ -98,19 +100,20 @@ public class Eye_script : MonoBehaviour {
           */
           //Vector3 deltaV = curObj - creature.transform.position;
           //double angle = Matf.Atan(Vector3.Project(deltaV,creature.transform.forward).magnitude / deltaV.magnitude);
-          double angle = Vector3.SignedAngle(creature.transform.forward, fun-creature.transform.position, Vector3.up);
-          angle *= Mathf.PI / 180;
+          double angle = Vector3.SignedAngle(creature.transform.forward, funVec, Vector3.up);
+          double nnAngle = (angle / 180.0); // Makes an angle more suitable for NN (range -1 to 1)
 
           //Vector3 dir = (fun.gameObject.transform.position - transform.position);
           //dir = fun.gameObject.transform.InverseTransformDirection(dir);
           //angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-          if(localized){
+          //if(localized){
             //fun = fun-creature.transform.position;
-            fun = creature.transform.InverseTransformDirection(fun);  //This seems like it's more like I want, but idk.
-          }
+          //  funPos = creature.transform.InverseTransformDirection(fun);  //This seems like it's more like I want, but idk.
+          //}
 
-          last [0, x] = angle;
+          last [0, x] = nnAngle;
+          last [0, x+1] = funVec.magnitude / ( (double) radius );
           //last[0,x]   = fun[0];
           //last[0,x+1] = fun[1]; //Manually encode the colum
           //last[0,x+2] = fun[2];
@@ -123,8 +126,9 @@ public class Eye_script : MonoBehaviour {
           //*/
 
         }
-
-        last_str = last.ToString();   //Good for debugging.
+        if(getStr){
+          last_str = last.ToString();   //Good for debugging.
+        }
         return(last);
     }
 
