@@ -11,8 +11,8 @@ using UnityEngine;
 namespace NeuralNet
 {
 
-   	public class Matrix 
-   	{
+    public class Matrix
+    {
       private double[,] matrix;
       private int rows, columns;
 
@@ -20,7 +20,7 @@ namespace NeuralNet
       {
          get { return columns; }
       }
-      
+
       public int Rows
       {
          get { return rows; }
@@ -57,7 +57,7 @@ namespace NeuralNet
          }
 
       }
-        
+
 
       public Matrix(int rows, int columns, params double[] elements)
       {
@@ -98,7 +98,7 @@ namespace NeuralNet
          this.columns = columns;
          matrix = new double[rows, columns];
          //initilzed to 0.0
-         
+
 
          if(randomize){
             System.Random rnd= NeuralNet.Misc.rnd;
@@ -149,7 +149,7 @@ namespace NeuralNet
             }
          }
          return tempMat;
-      } 
+      }
 
       public static Matrix Transpose(Matrix mat1)
       {
@@ -178,13 +178,13 @@ namespace NeuralNet
             }
             return temp;
          }
-		//	return null;
+    //  return null;
          throw new Exception("Matrix sizes arn't the same!");
       }
 
       public static Matrix operator- (Matrix mat1, Matrix mat2)
       {
-        
+
          if(mat1.Rows == mat2.Rows && mat1.Columns == mat2.Columns)
          {
             Matrix temp = new Matrix(mat1.Rows, mat2.Columns);
@@ -199,7 +199,7 @@ namespace NeuralNet
          }
          throw new Exception("Matrices are not the same size!");
       }
-      
+
       public static Matrix operator+ (Matrix mat1, Matrix mat2)
       {
          if (mat1.Rows == mat2.Rows && mat1.Columns == mat2.Columns)
@@ -214,7 +214,7 @@ namespace NeuralNet
             }
             return temp;
          }
-			//return null;
+      //return null;
          throw new Exception("Dimensions do not match");
       }
 
@@ -232,11 +232,11 @@ namespace NeuralNet
                }
             }
             return temp;
-         
+
 
       }
 
-		//Scaler multiplicatoin.
+    //Scaler multiplicatoin.
       public static Matrix operator* (double scaler, Matrix mat1)
       {
          Matrix temp = new Matrix(mat1.Rows, mat1.Columns);
@@ -249,16 +249,16 @@ namespace NeuralNet
          }
          return temp;
       }
-		//Scaler Multiplication.
+    //Scaler Multiplication.
       public static Matrix operator* (Matrix mat1, double scaler)
       {
          return scaler * mat1;
       }
 
 
-      
+
         //Attempting to thread this!
-		//Matrix multiplication
+    //Matrix multiplication
       public static Matrix operator* (Matrix mat1, Matrix mat2)
       {
          //return threaded_Mult(mat1,mat2);
@@ -294,7 +294,7 @@ namespace NeuralNet
          }
          throw new Exception("Either the matrices are not the same sizes or a re not vectors!");
       }
-      
+
 
         //TODO: Set-row
         //TODO: Get-row
@@ -304,11 +304,11 @@ namespace NeuralNet
         public static Matrix AddBias(Matrix mat1)
         {
             Matrix temp = new Matrix(mat1.Rows, mat1.Columns +1);
-            
+
             for (int i = 0; i < temp.Rows; i++){
                 temp[i,0] = 1;  //Add the bias
             }
-            
+
             //Copy the rest of the matrix
             for (int i = 0; i < mat1.Rows; i++)
             {
@@ -317,14 +317,14 @@ namespace NeuralNet
                   temp[i, j+1] = mat1[i, j];
                }
             }
-            
+
             return temp;
         }
 
         public static Matrix RemoveBias(Matrix mat1)
         {
             Matrix temp = new Matrix(mat1.Rows, mat1.Columns -1);
-            
+
             //Copy the rest of the matrix
             for (int i = 0; i < mat1.Rows; i++)
             {
@@ -333,10 +333,10 @@ namespace NeuralNet
                   temp[i, j] = mat1[i, j+1];
                }
             }
-            
+
             return temp;
         }
-        
+
 
         public static Matrix threaded_Mult(Matrix mat1, Matrix mat2){
          LinkedList<Thread> threads = new LinkedList<Thread>();
@@ -356,7 +356,7 @@ namespace NeuralNet
          }
 
 
-         throw new Exception("Invalid matrices for multiplication");                    
+         throw new Exception("Invalid matrices for multiplication");
         }
 
        public static void threaded_Mult_Helper(Matrix mat1, Matrix mat2, double[,] temp, int j){
@@ -365,11 +365,11 @@ namespace NeuralNet
                 double sum=0;
                 //Debug.Log("fs");
                 //temp[currow,dcol]=3;
-				for(int k=0; k < mat1.columns; k++){
+        for(int k=0; k < mat1.columns; k++){
                     sum+= mat1[i,k]*mat2[k,j];  //OUT OF BOUDNS EXCEPTION. FFS,
                 }
                 //Debug.Log("wo:"+currow+":"+dcol+"= "+sum);
-				temp[i,j]=sum;
+        temp[i,j]=sum;
             }
        }
    }

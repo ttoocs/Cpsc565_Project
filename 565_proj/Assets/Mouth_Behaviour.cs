@@ -11,33 +11,33 @@ public class Mouth_Behaviour : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		this.gameObject.name = "Mouth";
-		#if MOUTH_COLLIDER
-			this.gameObject.AddComponent<Rigidbody>();	//THE FIX YOU NEEDED.
-			this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-			this.gameObject.GetComponent<Rigidbody>().useGravity = false;
-			this.gameObject.GetComponent<BoxCollider>().isTrigger = false;
+    this.gameObject.name = "Mouth";
+    #if MOUTH_COLLIDER
+      this.gameObject.AddComponent<Rigidbody>();  //THE FIX YOU NEEDED.
+      this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+      this.gameObject.GetComponent<Rigidbody>().useGravity = false;
+      this.gameObject.GetComponent<BoxCollider>().isTrigger = false;
 #else
-			this.gameObject.GetComponent<BoxCollider>().isTrigger = true;
+      this.gameObject.GetComponent<BoxCollider>().isTrigger = true;
 #endif
         parent = this.transform.parent.gameObject;
         parentBehaviour = parent.GetComponent<Creature_script_main>();
     }
-	
-	// Update is called once per frame
-	void Update () {
-	}
+  
+  // Update is called once per frame
+  void Update () {
+  }
 
     //TODO: If they stay in the mouth, take damage/etc.
 
-	#if MOUTH_COLLIDER
-	void OnCollisionEnter (Collision collision)	
-	#else
-	void OnTriggerEnter (Collider collision) 
-	#endif
-	{
+  #if MOUTH_COLLIDER
+  void OnCollisionEnter (Collision collision) 
+  #else
+  void OnTriggerEnter (Collider collision) 
+  #endif
+  {
 #if MOUTH_COLLIDE_DEBUG
-			Debug.Log ("Mouth Collided");
+      Debug.Log ("Mouth Collided");
 #endif
 
         /* if (collision.gameObject == this.transform.parent.gameObject) 
@@ -51,7 +51,7 @@ public class Mouth_Behaviour : MonoBehaviour {
             parentBehaviour.nomNomNom(damage);
         }
 
-	}
+  }
 #if MOUTH_COLLIDER
       void OnCollisionStay(Collision collision){OnCollisionEnter(collision);    }
 #else

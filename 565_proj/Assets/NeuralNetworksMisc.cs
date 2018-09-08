@@ -10,78 +10,78 @@ using UnityEngine;
 
 namespace NeuralNet
 {
-	//Allows passing through a function that takes a double.
-	public delegate double ActivationFunction(double x);
-   
+  //Allows passing through a function that takes a double.
+  public delegate double ActivationFunction(double x);
 
-	//A wrapper for two functions.
-	public class Neural_func{
-		public ActivationFunction func;
-		public ActivationFunction deriv;
-		public Neural_func(ActivationFunction forward, ActivationFunction back){
-			this.func = forward;
-			this.deriv = back;
-		}
-	}
 
-	public class Misc
-	{
-		//Contains Misc things that are nice to have.
+  //A wrapper for two functions.
+  public class Neural_func{
+    public ActivationFunction func;
+    public ActivationFunction deriv;
+    public Neural_func(ActivationFunction forward, ActivationFunction back){
+      this.func = forward;
+      this.deriv = back;
+    }
+  }
 
-		//Neural_func of sigmoid:
-		//public Neural_func Neural_sigmoid = new Neural_func(sigmoid, sigmoid_deriv);
+  public class Misc
+  {
+    //Contains Misc things that are nice to have.
 
-        public static System.Random rnd = new System.Random(1); 
-        
-		public static double sigmoid(double val)
-		{
-			return 1 / (1 + Math.Pow(Math.E, -val));
-		}
-		public static double sigmoid_deriv(double val)
-		{
-			return sigmoid(val) * (1 - sigmoid(val));
-		}
+    //Neural_func of sigmoid:
+    //public Neural_func Neural_sigmoid = new Neural_func(sigmoid, sigmoid_deriv);
+
+        public static System.Random rnd = new System.Random(1);
+
+    public static double sigmoid(double val)
+    {
+      return 1 / (1 + Math.Pow(Math.E, -val));
+    }
+    public static double sigmoid_deriv(double val)
+    {
+      return sigmoid(val) * (1 - sigmoid(val));
+    }
         public static Neural_func sigmoidNF(){
             return new Neural_func(Misc.sigmoid, Misc.sigmoid_deriv);
         }
-        
+
         public static double randomize_weight =1;
         public static double randomize_sub = .5;
         public static double randomize(double val)
         {
             return val += (NeuralNet.Misc.rnd.NextDouble() -randomize_sub)*randomize_weight ;
         }
-	}
+  }
 
     //Assuming 1D input array
 
-	//Simple 1D-input Layer class.
-	public class Layer
-	{
-		Neural_func func;	//The function given to it.
-		Matrix nodes;	//Cache of values.
-		Matrix weights;
+  //Simple 1D-input Layer class.
+  public class Layer
+  {
+    Neural_func func; //The function given to it.
+    Matrix nodes; //Cache of values.
+    Matrix weights;
         Matrix x;
         int batchsize;
-		//Matrix last_value.
+    //Matrix last_value.
 
-        
-		public Layer(int in_size, int out_size, Neural_func function, int batchsize=1)
-		{
-			func = function;
+
+    public Layer(int in_size, int out_size, Neural_func function, int batchsize=1)
+    {
+      func = function;
             this.batchsize = batchsize; //By default 1.
-			nodes = new Matrix(batchsize, out_size,false); //No need to randomize the node-values (For standard NN)
+      nodes = new Matrix(batchsize, out_size,false); //No need to randomize the node-values (For standard NN)
             #if ADD_BIAS
                 weights = new Matrix(in_size + 1, out_size,true);
             #else
-			    weights = new Matrix(in_size, out_size,true);   //Random weights!
+          weights = new Matrix(in_size, out_size,true);   //Random weights!
             #endif
             //Need to randomize weights.
-		}
+    }
 
-		//Forward Propagation.
-		public Matrix Forward(Matrix xin)
-		{
+    //Forward Propagation.
+    public Matrix Forward(Matrix xin)
+    {
 
             //Add-in a 1 value to each row? -> New Matrix?!
             //this.x = x; //Saves the input for back-propagation.
@@ -93,22 +93,22 @@ namespace NeuralNet
             if(x.Rows != batchsize){
                 throw new Exception("Batch-size is inconsistant.");
             }
-            
+
             if(x.Columns != weights.Rows){
                 throw new Exception("Inconsistant number of inputs for forward.");
             }
 
-            
 
-			nodes = Matrix.Transform(func.func, x* weights);    //Saves nodes post-activation.
 
-			return nodes;
+      nodes = Matrix.Transform(func.func, x* weights);    //Saves nodes post-activation.
 
-		} 
+      return nodes;
 
-		//Backward Propagation.
-		public Matrix Backwards(Matrix yin, Boolean end=false, Boolean learn=true)
-		{
+    }
+
+    //Backward Propagation.
+    public Matrix Backwards(Matrix yin, Boolean end=false, Boolean learn=true)
+    {
             Matrix y = yin;
             #if ADD_BIAS
                 if(!end){
@@ -128,23 +128,23 @@ namespace NeuralNet
 
             //This only works on the last layer. >:
             if(end){
-    			err = y - nodes; //Only supports "last"
+          err = y - nodes; //Only supports "last"
             }else{
-                err = y; //Takes in error from prior result. 
+                err = y; //Takes in error from prior result.
             }
-    	    delta = Matrix.HadamardProd(err , Matrix.Transform(func.deriv,nodes)); //Adjust for the slope
-     
-    		if (learn)
-    		{
-    			weights = weights + (Matrix.Transpose(x) * delta); //Apply the values.
-    		}
-               
-    		return delta * Matrix.Transpose(weights);               
-            
-		}
+          delta = Matrix.HadamardProd(err , Matrix.Transform(func.deriv,nodes)); //Adjust for the slope
+
+        if (learn)
+        {
+          weights = weights + (Matrix.Transpose(x) * delta); //Apply the values.
+        }
+
+        return delta * Matrix.Transpose(weights);
+
+    }
 
 
-	}
+  }
 
     public class Network{
         Layer[] Layers;
@@ -180,7 +180,7 @@ namespace NeuralNet
             }
             return carry;
         }
-    
+
     }
 
 }

@@ -7,18 +7,18 @@ namespace NeuralNet{
 
 public class NN_TEST : MonoBehaviour {
 
-	// SIGMOID!
-   //Neural_func Neural_sigmoid; 
+  // SIGMOID!
+   //Neural_func Neural_sigmoid;
 
 
-	void Start () {
-        
+  void Start () {
+
        // Matrix fun = new Matrix(2,3, new double[,]{{0,1,2},{3,4,5}});
         //Matrix f2 = Matrix.Transpose(fun);
-        
-        
+
+
         //Debug.Log("Matrix Mult: "+(f2*fun).ToString());
-        //Debug.Log("Matrix TMult: "+Matrix.threaded_Mult(f2,fun).ToString());    
+        //Debug.Log("Matrix TMult: "+Matrix.threaded_Mult(f2,fun).ToString());
 
         Debug.Log("Testing neural network:");
         //not_tefster();
@@ -55,7 +55,7 @@ public class NN_TEST : MonoBehaviour {
         ndset = new Matrix(2,5,new double[,]{ {0,0,0,0,1},{1,1,1,1,0}});
         //A big thing, to train weird functions!
     }
-      
+
     void network_train1(bool prnt = false){
         for(int i =0; i < ndset.Rows ; i++){
             Matrix a = new Matrix(1,4,new double[,] {{ndset.Elements[i,0],ndset.Elements[i,1],ndset.Elements[i,2],ndset.Elements[i,3]}});   //Gets the arguments.
@@ -96,7 +96,7 @@ public class NN_TEST : MonoBehaviour {
         Matrix dataset_or = new Matrix(4,3, new double[,]{{0,0,0},{0,1,1},{1,0,1},{1,1,1}});
         Matrix dataset_left = new Matrix(4,3, new double[,]{{0,0,0},{0,1,0},{1,0,1},{1,1,1}});
        // Matrix v0 = new Matrix(1,1, new double[,]{{0}});
-        
+
         dset = dataset_left;
 
         Debug.Log("Start:");
@@ -130,7 +130,7 @@ public class NN_TEST : MonoBehaviour {
     void not_tester(){
         l1 = new Layer(1,5,Misc.sigmoidNF());
         l2 = new Layer(5,1,Misc.sigmoidNF());
-        
+
         not_testcase(true);
         for(int i =0; i<100; i++){ //Training.
             not_testcase();
@@ -142,25 +142,25 @@ public class NN_TEST : MonoBehaviour {
         //Matrix TestData = new Matrix(2,2, new double[,] { {1,0}{0,1}});
         Matrix v1 = new Matrix(1,1, new double[,]{{1}});
         Matrix v0 = new Matrix(1,1, new double[,]{{0}});
- 
+
             Matrix a = l2.Forward(l1.Forward(v1)); //Forward
             if(prnt){ Debug.Log("1: forward." + a.ToString());}
-            
+
             l1.Backwards(l2.Backwards(v0,true));
             //Debug.Log("ffs: "+a.ToString());
-            //l1.Backwards(a,false); 
+            //l1.Backwards(a,false);
 
             a = l2.Forward(l1.Forward(v0)); //Forward
             if(prnt){ Debug.Log("0: forward."+ a.ToString());}
             l1.Backwards(l2.Backwards(v1,true));
-            
-        
-            
+
+
+
         //}
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+  // Update is called once per frame
+  void Update () {
         for(int i = 0 ; i < 100; i++){
             network_train1();
         }
@@ -170,11 +170,11 @@ public class NN_TEST : MonoBehaviour {
         //    not_testcase();
         //}
         //not_testcase(true);
-            
-		//  for(int j =0; j<1000; j++)
+
+    //  for(int j =0; j<1000; j++)
         //          train(dset,l1);
         //    train(dset,l1,true);
-	}
+  }
 }
 
 }
