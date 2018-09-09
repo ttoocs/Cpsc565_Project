@@ -6,10 +6,10 @@ public class Creature_init : MonoBehaviour {
 
   public GameObject creature;
 
-    int num_spawn= 100;
-    float xbound = 60f;
-    float ybound = 60f;
-  float height =2.6f;
+  public int num_spawn= 100;
+  public float xbound = 60f;
+  public float ybound = 60f;
+  public float height =2.6f;
   // Use this for initialization
   void Start () {
         //creature = this.gameObject();
